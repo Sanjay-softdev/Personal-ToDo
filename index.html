@@ -11,6 +11,199 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Fredoka:wght@500;700&display=swap');
 
+    /* ── DREAMY LOADING SCREEN ── */
+    #dreamy-loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #131a35 0%, #060913 100%);
+      overflow: hidden;
+      font-family: 'Fredoka', sans-serif;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      color: #fff;
+    }
+
+    #dreamy-loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .ambient-glow-1 {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(103, 58, 183, 0.15) 0%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      bottom: -10%;
+      right: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 70%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .drifting-cloud {
+      position: absolute;
+      opacity: 0.18;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(20px);
+    }
+    .cloud-slow {
+      width: 400px;
+      height: 250px;
+      top: 20%;
+      left: -100px;
+      animation: drift 70s linear infinite;
+    }
+    .cloud-fast {
+      width: 300px;
+      height: 180px;
+      bottom: 15%;
+      right: -100px;
+      animation: drift 50s linear infinite reverse;
+    }
+
+    @keyframes drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(110vw); }
+    }
+
+    .bg-twinkle-star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.3;
+      animation: twinkleKey var(--d, 3s) ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkleKey {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 4px #fff); }
+    }
+
+    .celestial-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .glowing-moon {
+      animation: floatMoon 4.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.4));
+    }
+
+    @keyframes floatMoon {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    .orbiting-star-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      animation: orbitSpin var(--dur, 10s) linear infinite;
+      pointer-events: none;
+    }
+
+    .orbit-star {
+      position: absolute;
+      font-size: 1.1rem;
+      color: #ffe29a;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+      opacity: 0.95;
+    }
+
+    @keyframes orbitSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .orbiting-star-container .orbit-star {
+      animation: counterSpin var(--dur, 10s) linear infinite;
+    }
+    @keyframes counterSpin {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .shooting-star {
+      position: absolute;
+      top: var(--top, 10%);
+      left: var(--left, 80%);
+      width: 120px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+      transform: rotate(-35deg);
+      opacity: 0;
+      pointer-events: none;
+      animation: shootingKey var(--dur, 6s) ease-in-out infinite;
+      animation-delay: var(--delay, 2s);
+    }
+
+    @keyframes shootingKey {
+      0% { transform: translate(0, 0) rotate(-35deg) scale(0); opacity: 0; }
+      5% { opacity: 0.9; transform: translate(-80px, 56px) rotate(-35deg) scale(1); }
+      15% { transform: translate(-300px, 210px) rotate(-35deg) scale(0); opacity: 0; }
+      100% { transform: translate(-300px, 210px) rotate(-35deg) scale(0); opacity: 0; }
+    }
+
+    .loader-title {
+      font-size: 1.25rem;
+      letter-spacing: 2px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      margin-bottom: 1.2rem;
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    .star-progress-indicator {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .p-star-indicator {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.15);
+      transition: color 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), text-shadow 0.4s ease;
+    }
+
+    .p-star-indicator.lit {
+      color: #ffd066;
+      transform: scale(1.3);
+      text-shadow: 0 0 8px #f7b733, 0 0 15px #ffe29a;
+    }
+
     :root {
       --bg: #FFFDF3;
       /* Retro Comic Cream Paper */
@@ -704,6 +897,32 @@
       transform: translate(-1px, -1px);
       box-shadow: 2px 2px 0px #000;
       background: var(--gold-dim);
+    }
+
+    .tc-query-btn {
+      position: absolute;
+      bottom: 0.6rem;
+      right: 0.6rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 2px solid #000;
+      background: #FFF;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #000;
+      box-shadow: 1.5px 1.5px 0px #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s;
+      z-index: 10;
+    }
+
+    .tc-query-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0px #000;
+      background: var(--blue-dim);
     }
 
     /* Status select dropdown on card */
@@ -1543,6 +1762,67 @@
 
 <body>
 
+  <!-- DREAMY LUNAR LOADING PAGE -->
+  <div id="dreamy-loading-screen">
+    <!-- Ambient Nebulae -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+    
+    <!-- Floating Clouds -->
+    <div class="drifting-cloud cloud-slow"></div>
+    <div class="drifting-cloud cloud-fast"></div>
+
+    <!-- Background Twinkling Stars -->
+    <div id="loading-stars-bg" style="position: absolute; inset:0; pointer-events: none;"></div>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-star" style="--top: 15%; --left: 85%; --dur: 7s; --delay: 1s;"></div>
+    <div class="shooting-star" style="--top: 30%; --left: 95%; --dur: 9s; --delay: 4s;"></div>
+    <div class="shooting-star" style="--top: 8%; --left: 75%; --dur: 8s; --delay: 6s;"></div>
+
+    <!-- Celestial Elements -->
+    <div class="celestial-container">
+      <!-- Large Glowing Crescent Moon -->
+      <svg width="120" height="120" viewBox="0 0 100 100" class="glowing-moon">
+        <defs>
+          <linearGradient id="moon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffe29a" />
+            <stop offset="50%" stop-color="#ffd066" />
+            <stop offset="100%" stop-color="#f7b733" />
+          </linearGradient>
+          <filter id="moon-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="7" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+        <path d="M 50,15 A 35,35 0 1,0 85,50 A 26,26 0 1,1 50,15" fill="url(#moon-grad)" filter="url(#moon-glow)" />
+      </svg>
+
+      <!-- Orbiting Stars -->
+      <div class="orbiting-star-container" style="--dur: 12s;">
+        <span class="orbit-star" style="top: 15px; left: 15px;">✦</span>
+      </div>
+      <div class="orbiting-star-container" style="--dur: 8s;">
+        <span class="orbit-star" style="bottom: 25px; right: 25px; font-size: 0.85rem;">✦</span>
+      </div>
+      <div class="orbiting-star-container" style="--dur: 15s;">
+        <span class="orbit-star" style="bottom: 10px; left: 45px; font-size: 0.95rem;">✦</span>
+      </div>
+    </div>
+
+    <!-- Loading Caption -->
+    <div class="loader-title">Gathering Starlight...</div>
+
+    <!-- Star-based Progress Indicator -->
+    <div class="star-progress-indicator">
+      <span class="p-star-indicator" id="prog-star-1">★</span>
+      <span class="p-star-indicator" id="prog-star-2">★</span>
+      <span class="p-star-indicator" id="prog-star-3">★</span>
+      <span class="p-star-indicator" id="prog-star-4">★</span>
+      <span class="p-star-indicator" id="prog-star-5">★</span>
+    </div>
+  </div>
+
   <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-brand">
@@ -1584,9 +1864,8 @@
       <div class="hdr-right">
         <div class="streak-badge" id="streak-badge">🔥 0</div>
         <div class="star-badge" id="star-badge" style="display:none">⭐ 0</div>
-        <div class="user-pill" id="u-pill" onclick="doLogout()">
-          <span id="u-em"></span><span id="u-nm"></span>
-          <span style="font-size:.6rem;opacity:.5">⏏</span>
+        <div class="user-pill" id="u-pill" onclick="openProfileModal()">
+          <span id="u-avatar-wrap"></span><span id="u-nm"></span>
         </div>
       </div>
     </div>
@@ -1611,15 +1890,37 @@
           </div>
         </div>
         <div class="filters-row" id="filters-row">
-          <button class="flt on" onclick="setFlt('all',this)">All</button>
-          <button class="flt" onclick="setFlt('active',this)">Active</button>
-          <button class="flt" onclick="setFlt('in-progress',this)">In Progress</button>
-          <button class="flt" onclick="setFlt('completed',this)">Completed</button>
-          <button class="flt" onclick="setFlt('mine',this)">Mine</button>
-          <button class="flt" onclick="setFlt('hers',this)">Hers</button>
-          <button class="flt" onclick="setFlt('urgent',this)">🔴 Urgent</button>
-          <button class="flt" onclick="setFlt('sms',this)">📱 SMS</button>
+          <button class="flt on" id="flt-all" onclick="setFlt('all',this)">All</button>
+          <button class="flt" id="flt-active" onclick="setFlt('active',this)">Active</button>
+          <button class="flt" id="flt-in-progress" onclick="setFlt('in-progress',this)">In Progress</button>
+          <button class="flt" id="flt-completed" onclick="setFlt('completed',this)">Completed</button>
+          <button class="flt" id="flt-mine" onclick="setFlt('mine',this)">Mine</button>
+          <button class="flt" id="flt-hers" onclick="setFlt('hers',this)">Hers</button>
+          
+          <!-- Category Dropdown Pill -->
+          <select class="flt" id="flt-cat-select" onchange="setFltSelect('cat', this.value)" style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
+            <option value="">📁 Category</option>
+            <option value="general">📋 General</option>
+            <option value="sms">📱 SMS</option>
+            <option value="date">🌹 Date</option>
+            <option value="shopping">🛍️ Shopping</option>
+            <option value="travel">✈️ Travel</option>
+            <option value="food">🍽️ Food</option>
+            <option value="home">🏠 Home</option>
+            <option value="health">💊 Health</option>
+            <option value="learning">📚 Learning</option>
+          </select>
+
+          <!-- Priority Dropdown Pill -->
+          <select class="flt" id="flt-pri-select" onchange="setFltSelect('pri', this.value)" style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
+            <option value="">👑 Priority</option>
+            <option value="urgent">🔴 Urgent</option>
+            <option value="high">🟠 High</option>
+            <option value="medium">🟡 Medium</option>
+            <option value="low">⚪ Low</option>
+          </select>
         </div>
+
         <div id="todos-list">
           <div class="spinner-wrap">
             <div class="spin"></div>
@@ -1653,7 +1954,17 @@
           <button class="nudge-send-btn" onclick="sendNudge()">Send this to her 💛</button>
         </div>
         <div class="section-head">Check-in Note</div>
-        <textarea class="note-input" id="note-text" placeholder="Write a note, encouragement, or update…"></textarea>
+        
+        <!-- Reply Preview Bar -->
+        <div id="reply-preview-container" style="display: none; background: #fff; border: 3px solid #000; border-bottom: none; border-radius: var(--r) var(--r) 0 0; padding: 0.6rem 0.8rem; align-items: center; justify-content: space-between; font-family: 'Comic Neue', cursive; font-weight: 700; box-shadow: 2px 2px 0px #000; margin-bottom: -3px; position: relative; z-index: 2;">
+          <div style="font-size: 0.82rem; color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; margin-right: 0.5rem;">
+            <span id="reply-preview-label" style="color: var(--rose);">↳ Replying to:</span> 
+            <span id="reply-preview-text" style="color: var(--muted); font-style: italic;"></span>
+          </div>
+          <button class="flt" onclick="cancelReply()" style="background: var(--gold); border-color: #000; padding: 0.15rem 0.4rem; font-size: 0.75rem; line-height: 1; cursor: pointer; font-weight: 900; margin: 0;">×</button>
+        </div>
+
+        <textarea class="note-input" id="note-text" placeholder="Write a note, encouragement, or update…" style="margin-top: 0;"></textarea>
         <button class="note-send" onclick="sendNote()">Send ✦</button>
         <div class="section-head" style="margin-top:1rem;">Messages</div>
         <div id="notes-feed"></div>
@@ -1843,6 +2154,80 @@
     </div>
   </div>
 
+  <!-- QUERY TASK MODAL -->
+  <div class="overlay" id="query-modal" onclick="closeQueryOvr(event)">
+    <div class="modal" style="max-width: 400px;">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Ask about Task 💬</div>
+      
+      <div style="font-size: 0.95rem; margin-bottom: 1.2rem; background: var(--surface); padding: 0.8rem; border: 3px solid #000; border-radius: 8px; box-shadow: 2px 2px 0px #000; font-family: 'Comic Neue', cursive; font-weight: bold; color: #000;" id="q-task-title-display">
+        Task: ...
+      </div>
+
+      <div class="field-grp">
+        <div class="field-lbl">Your Question</div>
+        <textarea class="bulk-area" id="q-input" rows="3" placeholder="Type your question here…"></textarea>
+      </div>
+      
+      <button class="m-submit" onclick="sendTaskQuery()">Send Question 🚀</button>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div class="overlay" id="profile-modal" onclick="closeProfileOvr(event)">
+    <div class="modal" style="max-width: 360px;">
+      <div class="modal-handle"></div>
+      <div class="modal-title">My Profile 👤</div>
+      
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div id="p-avatar-preview-wrap" style="width: 90px; height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: var(--gold-dim); border: 3px solid #000; border-radius: 50%; box-shadow: 4px 4px 0px #000; overflow: hidden; animation: float 3s ease-in-out infinite;">
+          <div id="p-avatar-preview" style="font-size: 4.5rem; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">⭐</div>
+        </div>
+      </div>
+
+      <div class="field-grp">
+        <div class="field-lbl">Display Name</div>
+        <input class="field-in" id="p-name-input" type="text" placeholder="Your Name" />
+      </div>
+
+      <div class="field-grp">
+        <div class="field-lbl">Profile Emoji / Avatar</div>
+        <input class="field-in" id="p-emoji-input" type="text" placeholder="e.g. 👦, 👧, 🐼, 🍕" maxlength="4" oninput="updateAvatarPreview(this.value)" />
+        <input type="file" id="p-file-input" accept="image/*" style="display: none;" onchange="handleProfileImageUpload(event)" />
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; flex-wrap: wrap;">
+          <button class="flt" onclick="document.getElementById('p-file-input').click()" style="background: var(--blue); color: white; border-color: #000; padding: 0.4rem 0.8rem; font-size: 0.78rem;">🖼️ Choose from Gallery</button>
+        </div>
+        <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.5rem; flex-wrap: wrap;">
+          <button class="flt" onclick="selectProfileEmoji('👦')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👦</button>
+          <button class="flt" onclick="selectProfileEmoji('👧')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👧</button>
+          <button class="flt" onclick="selectProfileEmoji('🐱')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐱</button>
+          <button class="flt" onclick="selectProfileEmoji('🐼')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐼</button>
+          <button class="flt" onclick="selectProfileEmoji('🦊')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦊</button>
+          <button class="flt" onclick="selectProfileEmoji('🦄')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦄</button>
+          <button class="flt" onclick="selectProfileEmoji('💖')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">💖</button>
+          <button class="flt" onclick="selectProfileEmoji('🔥')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🔥</button>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem;">
+        <button class="m-submit" onclick="saveProfileChanges()" style="background: var(--green); margin: 0;">Save Profile ✦</button>
+        <button class="m-submit" onclick="doLogout()" style="background: var(--rose); margin: 0;">Sign Out ⏏</button>
+      </div>
+    </div>
+  </div>
+  <!-- CUSTOM CONFIRM MODAL -->
+  <div class="overlay" id="confirm-modal" onclick="closeConfirm(false)" style="z-index: 10000;">
+    <div class="modal" style="max-width: 320px; border-color: #000;" onclick="event.stopPropagation()">
+      <div class="modal-handle" style="background: var(--rose);"></div>
+      <div class="modal-title" style="color: var(--rose);" id="c-modal-title">Warning! ⚠️</div>
+      <p id="c-modal-msg" style="font-size: 0.95rem; margin: 1rem 0; line-height: 1.4; color: #000; text-align: center; font-weight: 700;"></p>
+      <div style="display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.2rem;">
+        <button class="flt" onclick="closeConfirm(false)" style="background: #FFF; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+        <button class="flt" onclick="closeConfirm(true)" style="background: var(--rose); color: white; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Yes, Go! 🚀</button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
@@ -1877,6 +2262,8 @@
     let redeems = [];
     let flt = 'all';
     let editId = null;
+    let queryTaskId = null;
+    let replyTargetId = null;
     let realtimeChannel = null;
     let profilesMap = {};
 
@@ -1898,10 +2285,10 @@
       };
     }
     function noteToDb(n) {
-      return { id: n.id, text: n.text, from_role: n.from, from_name: n.fromName, type: n.type, ts: n.ts };
+      return { id: n.id, text: n.text, from_role: n.from, from_name: n.fromName, type: n.type, ts: n.ts, reply_to: n.replyTo || null };
     }
     function noteFromDb(n) {
-      return { id: n.id, text: n.text, from: n.from_role, fromName: n.from_name, type: n.type, ts: n.ts };
+      return { id: n.id, text: n.text, from: n.from_role, fromName: n.from_name, type: n.type, ts: n.ts, replyTo: n.reply_to || null };
     }
     function redeemToDb(r) {
       return { id: r.id, message: r.message, phone: r.phone, status: r.status, ts: r.ts, responded_at: r.respondedAt || null };
@@ -1941,14 +2328,79 @@
       }
     }
 
+    function initLoadingStars() {
+      const bg = document.getElementById('loading-stars-bg');
+      if (!bg) return;
+      const count = 45;
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        star.className = 'bg-twinkle-star';
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+        bg.appendChild(star);
+      }
+    }
+
+    function startLoadingProgress() {
+      return new Promise((resolve) => {
+        let currentStep = 0;
+        const interval = setInterval(() => {
+          currentStep++;
+          const star = document.getElementById(`prog-star-${currentStep}`);
+          if (star) {
+            star.classList.add('lit');
+          }
+          if (currentStep >= 5) {
+            clearInterval(interval);
+            setTimeout(resolve, 300);
+          }
+        }, 400);
+      });
+    }
+
     // ══════════════════════════════════════════════════
     //  INIT
     // ══════════════════════════════════════════════════
     window.onload = async () => {
-      const { data: { session: authSession } } = await sb.auth.getSession();
-      if (authSession) {
-        try { await setupSession(authSession.user); enterApp(); }
-        catch (e) { console.error('Session restore failed:', e); }
+      // 1. Initialize twinkling background stars
+      initLoadingStars();
+      
+      // 2. Start progress animation in parallel with session setup
+      const animPromise = startLoadingProgress();
+      
+      let authSession = null;
+      let sessionError = null;
+      
+      try {
+        const res = await sb.auth.getSession();
+        authSession = res.data.session;
+        if (authSession) {
+          await setupSession(authSession.user);
+        }
+      } catch (e) {
+        console.error('Session loading failed:', e);
+        sessionError = e;
+      }
+      
+      // 3. Wait for progress animation to finish
+      await animPromise;
+      
+      // 4. Fade out loading screen
+      const loader = document.getElementById('dreamy-loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => loader.remove(), 800);
+      }
+      
+      // 5. Enter the app or show login screen
+      if (authSession && !sessionError) {
+        enterApp();
+      } else {
+        document.getElementById('auth-screen').style.display = 'flex';
       }
     };
 
@@ -2006,7 +2458,7 @@
 
       const pill = document.getElementById('u-pill');
       pill.className = 'user-pill ' + session.role;
-      document.getElementById('u-em').textContent = session.emoji + ' ';
+      document.getElementById('u-avatar-wrap').innerHTML = renderAvatarHtml(session.emoji, true);
       document.getElementById('u-nm').textContent = session.name;
 
       document.getElementById('monitor-tab').style.display = session.role === 'him' ? '' : 'none';
@@ -2065,6 +2517,64 @@
       if (error) console.error('updateRedeem:', error);
     }
 
+    function isBase64Image(str) {
+      return typeof str === 'string' && str.startsWith('data:image/');
+    }
+
+    function renderAvatarHtml(emojiOrUrl, isPill = false) {
+      if (isBase64Image(emojiOrUrl)) {
+        const size = isPill ? '24px' : '48px';
+        const borderSize = isPill ? '1.5px' : '3px';
+        return `<img src="${emojiOrUrl}" style="width:${size}; height:${size}; border-radius:50%; border:${borderSize} solid #000; object-fit:cover; display:inline-block; vertical-align:middle; margin-right:4px;" />`;
+      }
+      const font = isPill ? '1.05rem' : '4.5rem';
+      return `<span style="font-size:${font}; display:inline-block; vertical-align:middle; margin-right:4px;">${emojiOrUrl || '⭐'}</span>`;
+    }
+
+    function updateAvatarPreview(emojiOrUrl) {
+      const prev = document.getElementById('p-avatar-preview');
+      prev.innerHTML = renderAvatarHtml(emojiOrUrl, false);
+    }
+
+    function handleProfileImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const max_size = 128;
+          let w = img.width;
+          let h = img.height;
+          
+          if (w > h) {
+            if (w > max_size) {
+              h *= max_size / w;
+              w = max_size;
+            }
+          } else {
+            if (h > max_size) {
+              w *= max_size / h;
+              h = max_size;
+            }
+          }
+          
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          
+          const base64Data = canvas.toDataURL('image/jpeg', 0.7);
+          document.getElementById('p-emoji-input').value = base64Data;
+          updateAvatarPreview(base64Data);
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     async function loadProfiles() {
       const { data, error } = await sb.from('profiles').select('*');
       if (error) { console.error('loadProfiles:', error); return; }
@@ -2078,7 +2588,10 @@
 
     function getUserLabel(role) {
       const p = profilesMap[role];
-      if (p) return `${p.emoji} ${p.name}`;
+      if (p) {
+        const displayEmoji = isBase64Image(p.emoji) ? (role === 'him' ? '👦' : '👧') : p.emoji;
+        return `${displayEmoji} ${p.name}`;
+      }
       return role === 'him' ? '👦 Sanjay' : '👧 My Love';
     }
 
@@ -2153,7 +2666,7 @@
     <div style="display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.05);">
       <span style="font-size:.75rem;">${CAT_ICONS[t.cat] || '📋'}</span>
       <span style="font-size:.78rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(t.text)}</span>
-      <span style="font-size:.65rem;background:var(--star-dim);color:var(--star);padding:.1rem .4rem;border-radius:6px;flex-shrink:0;">⭐×${STAR_MAP[t.priority] || 1}</span>
+      <span style="font-size:.65rem;background:var(--star-dim);color:#000;border:1px solid #000;padding:.1rem .4rem;border-radius:6px;flex-shrink:0;font-weight:700;">⭐×${STAR_MAP[t.priority] || 1}</span>
       <span class="pill p-${t.priority}" style="flex-shrink:0;">${priLabel(t.priority).split(' ')[0]}</span>
     </div>
   `).join('') + (todayTasks.length > 5 ? `<div style="font-size:.72rem;color:var(--muted);padding:.3rem 0;">+${todayTasks.length - 5} more…</div>` : '');
@@ -2164,8 +2677,34 @@
     // ══════════════════════════════════════════════════
     function setFlt(f, btn) {
       flt = f;
+      // Reset selects to empty default
+      document.getElementById('flt-cat-select').value = "";
+      document.getElementById('flt-pri-select').value = "";
+
       document.querySelectorAll('.flt').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
+      render();
+    }
+
+    function setFltSelect(type, val) {
+      if (!val) {
+        setFlt('all', document.getElementById('flt-all'));
+        return;
+      }
+      flt = val;
+      
+      if (type === 'cat') {
+        document.getElementById('flt-pri-select').value = "";
+      } else {
+        document.getElementById('flt-cat-select').value = "";
+      }
+
+      document.querySelectorAll('.flt').forEach(b => b.classList.remove('on'));
+      if (type === 'cat') {
+        document.getElementById('flt-cat-select').classList.add('on');
+      } else {
+        document.getElementById('flt-pri-select').classList.add('on');
+      }
       render();
     }
 
@@ -2187,11 +2726,12 @@
       else if (flt === 'completed') f = todos.filter(t => t.status === 'completed');
       else if (flt === 'mine') f = todos.filter(t => t.assignTo === 'both' || (session.role === 'him' ? t.assignTo === 'him' : t.assignTo === 'her'));
       else if (flt === 'hers') f = todos.filter(t => t.assignTo === 'her' || t.assignTo === 'both');
-      else if (flt === 'urgent') f = todos.filter(t => t.priority === 'urgent');
-      else if (flt === 'sms') f = todos.filter(t => t.cat === 'sms');
+      else if (['urgent', 'high', 'medium', 'low'].includes(flt)) f = todos.filter(t => t.priority === flt);
+      else if (CAT_ICONS[flt]) f = todos.filter(t => t.cat === flt);
 
       const priOrd = { urgent: 0, high: 1, medium: 2, low: 3 };
       const stOrd = { pending: 0, 'in-progress': 1, completed: 2 };
+      
       f.sort((a, b) => {
         if (stOrd[a.status] !== stOrd[b.status]) return stOrd[a.status] - stOrd[b.status];
         return (priOrd[a.priority] ?? 2) - (priOrd[b.priority] ?? 2);
@@ -2247,6 +2787,7 @@
           </div>
         </div>
       </div>
+      <button class="tc-query-btn" onclick="openQueryModal('${t.id}', event)" title="Ask question about this task">💬</button>
     </div>`;
       }).join('');
     }
@@ -2310,6 +2851,7 @@
     }
 
     async function delTodo(id) {
+      if (!await showConfirm('Are you sure you want to delete this task? This action cannot be undone! 🗑️', 'Danger! 🚨')) return;
       todos = todos.filter(x => x.id !== id);
       render(); renderDash(); renderMonitor();
       await deleteTodoDb(id); showToast('Removed ✓');
@@ -2340,6 +2882,7 @@
 
     async function saveEdit() {
       const t = todos.find(x => x.id === editId); if (!t) return;
+      if (!await showConfirm('Are you sure you want to save changes to this task? 💾', 'Confirm Save ✦')) return;
       const wasDone = t.status === 'completed';
       t.text = document.getElementById('e-text').value.trim() || t.text;
       t.description = document.getElementById('e-desc').value.trim();
@@ -2374,6 +2917,71 @@
       if (raw.startsWith('[') || raw.startsWith('{')) {
         try {
           const parsed = JSON.parse(raw);
+          
+          // Check if it's the Project/Categories/Features structure
+          if (parsed && (parsed.categories || parsed.project)) {
+            const list = [];
+            const categories = parsed.categories || [];
+            const isSMS = /Sri Balaji|BCA|Student|Faculty|Management/i.test(parsed.project || '');
+            const resolvedCat = isSMS ? 'sms' : null;
+            
+            for (const cat of categories) {
+              const catTitle = cat.title || '';
+              
+              // 1. Direct tasks array in category
+              if (Array.isArray(cat.tasks)) {
+                for (const t of cat.tasks) {
+                  if (typeof t === 'string' && t.trim()) {
+                    list.push({
+                      text: t.trim(),
+                      description: catTitle ? `Category: ${catTitle}` : '',
+                      cat: resolvedCat
+                    });
+                  } else if (typeof t === 'object' && t !== null) {
+                    const text = t.text || t.title || '';
+                    const desc = t.description || t.des || t.discription || catTitle || '';
+                    if (text.trim()) {
+                      list.push({
+                        text: text.trim(),
+                        description: desc.trim(),
+                        cat: resolvedCat
+                      });
+                    }
+                  }
+                }
+              }
+              
+              // 2. Features object in category
+              if (cat.features && typeof cat.features === 'object') {
+                for (const [featureName, featureTasks] of Object.entries(cat.features)) {
+                  if (Array.isArray(featureTasks)) {
+                    for (const t of featureTasks) {
+                      if (typeof t === 'string' && t.trim()) {
+                        list.push({
+                          text: t.trim(),
+                          description: catTitle ? `${catTitle} - ${featureName}` : featureName,
+                          cat: resolvedCat
+                        });
+                      } else if (typeof t === 'object' && t !== null) {
+                        const text = t.text || t.title || '';
+                        const desc = t.description || t.des || t.discription || `${catTitle} - ${featureName}`;
+                        if (text.trim()) {
+                          list.push({
+                            text: text.trim(),
+                            description: desc.trim(),
+                            cat: resolvedCat
+                          });
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            if (list.length > 0) return list;
+          }
+
+          // Otherwise fall back to standard JSON array / object format
           const items = Array.isArray(parsed) ? parsed : [parsed];
           return items.map(item => {
             const text = item.text || item.title || '';
@@ -2452,7 +3060,7 @@
       const defaultDesc = document.getElementById('m-desc').value.trim();
 
       const newTodos = parsedTasks.map(t => ({
-        id: uid(), text: t.text, description: t.description || defaultDesc, cat, priority: pri, status,
+        id: uid(), text: t.text, description: t.description || defaultDesc, cat: t.cat || cat, priority: pri, status,
         addedBy: session.role, assignTo: assign,
         himDone: status === 'completed', herDone: status === 'completed',
         dueDate: due, createdAt: now(), updatedAt: now()
@@ -2673,6 +3281,7 @@
 
     async function handleRedeem(id, newStatus) {
       const r = redeems.find(x => x.id === id); if (!r) return;
+      if (!await showConfirm(`Are you sure you want to ${newStatus === 'approved' ? 'grant' : 'deny'} this wish request? 🎁`, 'Respond to Wish ✦')) return;
       r.status = newStatus;
       r.respondedAt = now();
       await updateRedeemDb(r);
@@ -2735,6 +3344,8 @@
       const stars = calcHerStars();
       if (stars < 100) { showToast(`Need ${100 - stars} more stars first!`); return; }
 
+      if (!await showConfirm('Are you sure you want to redeem 100 stars to make this wish? 🌟', 'Confirm Wish 🎁')) return;
+
       const newRedeem = {
         id: uid(), message: msg, phone: phone,
         status: 'pending', ts: now(), respondedAt: null
@@ -2773,22 +3384,59 @@
       if (!txt) { showToast('Write something first!'); return; }
       const n = {
         id: uid(), text: txt, from: session.role, fromName: session.name,
-        type: 'note', ts: now()
+        type: 'note', ts: now(), replyTo: replyTargetId || null
       };
       notes.unshift(n);
       document.getElementById('note-text').value = '';
+      cancelReply();
       await saveNote(n); renderNotes();
       showToast('✦ Sent!');
+    }
+
+    function initiateReply(noteId) {
+      const note = notes.find(x => x.id === noteId);
+      if (!note) return;
+      replyTargetId = note.id;
+      document.getElementById('reply-preview-label').textContent = `↳ Replying to ${note.fromName}:`;
+      document.getElementById('reply-preview-text').textContent = `"${note.text.slice(0, 40)}${note.text.length > 40 ? '...' : ''}"`;
+      document.getElementById('reply-preview-container').style.display = 'flex';
+      document.getElementById('note-text').focus();
+    }
+
+    function cancelReply() {
+      replyTargetId = null;
+      document.getElementById('reply-preview-container').style.display = 'none';
+      document.getElementById('reply-preview-text').textContent = '';
     }
 
     function renderNotes() {
       const el = document.getElementById('notes-feed');
       if (!notes.length) { el.innerHTML = '<div class="empty"><div class="ei">💬</div><p>No messages yet.<br>Send a note or nudge!</p></div>'; return; }
-      el.innerHTML = notes.slice(0, 20).map(n => `
-    <div class="msg-bubble from-${n.from}">
-      ${n.type === 'nudge' ? '💛 ' : ''}${esc(n.text)}
-      <div class="msg-meta">${n.fromName} · ${timeAgo(n.ts)}${n.type === 'nudge' ? ' · motivation nudge' : ''}</div>
-    </div>`).join('');
+      el.innerHTML = notes.slice(0, 20).map(n => {
+        let replyHtml = '';
+        if (n.replyTo) {
+          const parent = notes.find(x => x.id === n.replyTo);
+          if (parent) {
+            replyHtml = `
+              <div class="reply-badge-bubble" style="background: rgba(0, 0, 0, 0.05); border-left: 3px solid var(--rose); padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.76rem; margin-bottom: 0.4rem; color: #555; text-align: left;">
+                <strong>${parent.fromName}:</strong> ${esc(parent.text.slice(0, 50))}${parent.text.length > 50 ? '...' : ''}
+              </div>
+            `;
+          }
+        }
+        return `
+          <div class="msg-bubble from-${n.from}">
+            ${replyHtml}
+            <div style="word-break: break-word;">${n.type === 'nudge' ? '💛 ' : ''}${esc(n.text)}</div>
+            <div class="msg-meta" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem;">
+              <span>${n.fromName} · ${timeAgo(n.ts)}${n.type === 'nudge' ? ' · motivation nudge' : ''}</span>
+              <button onclick="initiateReply('${n.id}')" style="background: none; border: none; padding: 0; font-family: 'Fredoka', sans-serif; font-size: 0.72rem; color: var(--rose); font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.15rem; transition: transform 0.1s;">
+                ↩️ Reply
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     // ══════════════════════════════════════════════════
@@ -2815,7 +3463,106 @@
     }
     function closeModal() { document.getElementById('modal').classList.remove('open'); }
     function closeOvr(e) { if (e.target === document.getElementById('modal')) closeModal(); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeEditModal(); } });
+    
+    function openQueryModal(id, e) {
+      if (e) e.stopPropagation();
+      const t = todos.find(x => x.id === id);
+      if (!t) return;
+      queryTaskId = id;
+      document.getElementById('q-task-title-display').innerHTML = `Task: <strong>${esc(t.text)}</strong>`;
+      document.getElementById('q-input').value = '';
+      document.getElementById('query-modal').classList.add('open');
+      setTimeout(() => document.getElementById('q-input').focus(), 300);
+    }
+    function closeQueryModal() {
+      document.getElementById('query-modal').classList.remove('open');
+      queryTaskId = null;
+    }
+    function closeQueryOvr(e) {
+      if (e.target === document.getElementById('query-modal')) closeQueryModal();
+    }
+    async function sendTaskQuery() {
+      const t = todos.find(x => x.id === queryTaskId);
+      if (!t) return;
+      const msg = document.getElementById('q-input').value.trim();
+      if (!msg) { showToast('Type a question first!'); return; }
+      
+      const recipient = t.assignTo === 'both' ? 'the other' : (t.assignTo === 'him' ? '👦 Sanjay' : '👧 My Love');
+      const formattedText = `❓ Question about task [${t.text}]: ${msg}`;
+      const n = {
+        id: uid(),
+        text: formattedText,
+        from: session.role,
+        fromName: session.name,
+        type: 'note',
+        ts: now()
+      };
+      
+      notes.unshift(n);
+      await saveNote(n);
+      renderNotes();
+      closeQueryModal();
+      showToast(`Question sent to ${recipient}! 🚀`);
+    }
+
+    function openProfileModal() {
+      if (!session) return;
+      document.getElementById('p-name-input').value = session.name || '';
+      document.getElementById('p-emoji-input').value = session.emoji || '';
+      updateAvatarPreview(session.emoji);
+      document.getElementById('profile-modal').classList.add('open');
+      setTimeout(() => document.getElementById('p-name-input').focus(), 300);
+    }
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.remove('open');
+    }
+    function closeProfileOvr(e) {
+      if (e.target === document.getElementById('profile-modal')) closeProfileModal();
+    }
+    function selectProfileEmoji(em) {
+      document.getElementById('p-emoji-input').value = em;
+      updateAvatarPreview(em);
+    }
+    async function saveProfileChanges() {
+      if (!session) return;
+      const newName = document.getElementById('p-name-input').value.trim();
+      const newEmoji = document.getElementById('p-emoji-input').value.trim();
+      if (!newName) { showToast('Name cannot be empty!'); return; }
+      if (!newEmoji) { showToast('Profile picture/emoji cannot be empty!'); return; }
+      
+      const { error } = await sb.from('profiles').update({ name: newName, emoji: newEmoji }).eq('email', session.email);
+      if (error) {
+        console.error('saveProfileChanges:', error);
+        showToast('Failed to update profile 😢');
+        return;
+      }
+      
+      session.name = newName;
+      session.emoji = newEmoji;
+      
+      if (profilesMap[session.role]) {
+        profilesMap[session.role].name = newName;
+        profilesMap[session.role].emoji = newEmoji;
+      }
+      
+      document.getElementById('u-avatar-wrap').innerHTML = renderAvatarHtml(newEmoji, true);
+      document.getElementById('u-nm').textContent = newName;
+      
+      updateAssignDropdowns();
+      render();
+      closeProfileModal();
+      showToast('Profile updated successfully! ✨');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeEditModal();
+        closeQueryModal();
+        closeProfileModal();
+        closeConfirm(false);
+      }
+    });
 
     // ══════════════════════════════════════════════════
     //  TOAST
@@ -2825,6 +3572,37 @@
       const t = document.getElementById('toast');
       t.textContent = msg; t.classList.add('show');
       clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ══════════════════════════════════════════════════
+    //  CUSTOM CONFIRM PROMISE
+    // ══════════════════════════════════════════════════
+    let confirmResolve = null;
+
+    function showConfirm(message, title = "Warning! ⚠️") {
+      if (confirmResolve) {
+        confirmResolve(false);
+      }
+      return new Promise((resolve) => {
+        confirmResolve = resolve;
+        document.getElementById('c-modal-title').textContent = title;
+        document.getElementById('c-modal-msg').innerHTML = message;
+        
+        const modal = document.getElementById('confirm-modal');
+        modal.classList.add('open');
+      });
+    }
+
+    function closeConfirm(val) {
+      const modal = document.getElementById('confirm-modal');
+      if (modal.classList.contains('open')) {
+        modal.classList.remove('open');
+        if (confirmResolve) {
+          const res = confirmResolve;
+          confirmResolve = null;
+          res(val);
+        }
+      }
     }
   </script>
 </body>

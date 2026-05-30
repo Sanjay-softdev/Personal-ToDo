@@ -55,27 +55,60 @@ alter table notes enable row level security;
 alter table redeems enable row level security;
 
 -- STEP 6: RLS Policies (private 2-person app - any authenticated user has full access)
+drop policy if exists "auth_select_profiles" on profiles;
 create policy "auth_select_profiles" on profiles for select to authenticated using (true);
+drop policy if exists "auth_update_profiles" on profiles;
+create policy "auth_update_profiles" on profiles for update to authenticated using (true);
 
+drop policy if exists "auth_select_todos" on todos;
 create policy "auth_select_todos" on todos for select to authenticated using (true);
+drop policy if exists "auth_insert_todos" on todos;
 create policy "auth_insert_todos" on todos for insert to authenticated with check (true);
+drop policy if exists "auth_update_todos" on todos;
 create policy "auth_update_todos" on todos for update to authenticated using (true);
+drop policy if exists "auth_delete_todos" on todos;
 create policy "auth_delete_todos" on todos for delete to authenticated using (true);
 
+drop policy if exists "auth_select_notes" on notes;
 create policy "auth_select_notes" on notes for select to authenticated using (true);
+drop policy if exists "auth_insert_notes" on notes;
 create policy "auth_insert_notes" on notes for insert to authenticated with check (true);
+drop policy if exists "auth_update_notes" on notes;
 create policy "auth_update_notes" on notes for update to authenticated using (true);
+drop policy if exists "auth_delete_notes" on notes;
 create policy "auth_delete_notes" on notes for delete to authenticated using (true);
 
+drop policy if exists "auth_select_redeems" on redeems;
 create policy "auth_select_redeems" on redeems for select to authenticated using (true);
+drop policy if exists "auth_insert_redeems" on redeems;
 create policy "auth_insert_redeems" on redeems for insert to authenticated with check (true);
+drop policy if exists "auth_update_redeems" on redeems;
 create policy "auth_update_redeems" on redeems for update to authenticated using (true);
+drop policy if exists "auth_delete_redeems" on redeems;
 create policy "auth_delete_redeems" on redeems for delete to authenticated using (true);
 
 -- STEP 7: Enable Realtime for live sync between both users
-alter publication supabase_realtime add table todos;
-alter publication supabase_realtime add table notes;
-alter publication supabase_realtime add table redeems;
+do $$
+begin
+  begin
+    alter publication supabase_realtime add table todos;
+  exception
+    when others then null;
+  end;
+  
+  begin
+    alter publication supabase_realtime add table notes;
+  exception
+    when others then null;
+  end;
+  
+  begin
+    alter publication supabase_realtime add table redeems;
+  exception
+    when others then null;
+  end;
+end
+$$;
 
 -- ══════════════════════════════════════════════════════════════
 --  STEP 8: INSERT YOUR PROFILES
@@ -84,4 +117,8 @@ alter publication supabase_realtime add table redeems;
 -- ══════════════════════════════════════════════════════════════
 insert into profiles (email, role, name, emoji) values
   ('sanjay125005@gmail.com', 'him', 'Sanjay', '⭐'),
-  ('kiruthikaammu655@gmail.com', 'her', 'Kiruthika', '🌙');
+  ('kiruthikaammu655@gmail.com', 'her', 'Kiruthika', '🌙')
+on conflict (email) do nothing;
+
+-- STEP 9: Add reply_to column to notes if it doesn't exist
+alter table notes add column if not exists reply_to text;
