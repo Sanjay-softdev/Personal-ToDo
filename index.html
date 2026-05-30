@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Our Little Space ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0f0e11;
+  --surface: #17151a;
+  --card: #1e1b23;
+  --border: #2e2a36;
+  --rose: #e8607a;
+  --rose-dim: #3a1f27;
+  --blue: #6080e8;
+  --blue-dim: #1a2040;
+  --gold: #d4a853;
+  --gold-dim: #2a2010;
+  --green: #5fba8c;
+  --green-dim: #0f2a1e;
+  --amber: #e8a030;
+  --amber-dim: #2a1e08;
+  --muted: #6e6878;
+  --text: #e8e0f0;
+  --text2: #b0a8c0;
+  --him: #6080e8;
+  --her: #e8607a;
+  --star: #f5c542;
+  --star-dim: #2a2208;
+  --r: 16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);}
+::selection{background:var(--rose);color:white;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* ── AUTH ── */
+#auth-screen{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:2rem;
+  background: radial-gradient(ellipse at 30% 20%, #2a1020 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, #101830 0%, transparent 60%), var(--bg);
+}
+.auth-brand{text-align:center;margin-bottom:2.5rem;}
+.auth-logo{font-size:2.8rem;margin-bottom:.5rem;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.auth-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--text);letter-spacing:.02em;}
+.auth-title em{color:var(--rose);font-style:italic;}
+.auth-sub{font-size:.8rem;color:var(--muted);margin-top:.3rem;letter-spacing:.05em;}
+
+.auth-card{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:2rem 1.8rem;width:100%;max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.auth-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;
+  background:var(--surface);border-radius:10px;padding:3px;}
+.auth-tab{flex:1;padding:.5rem;border:none;border-radius:8px;font-family:'Outfit',sans-serif;
+  font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;
+  background:none;color:var(--muted);}
+.auth-tab.active{background:var(--border);color:var(--text);}
+
+.field-grp{margin-bottom:1rem;}
+.field-lbl{font-size:.7rem;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.35rem;}
+.field-in{width:100%;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Outfit',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .15s;}
+.field-in:focus{border-color:var(--rose);}
+.field-in::placeholder{color:var(--muted);}
+
+.field-grp.who-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.who-opt{padding:.65rem .5rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);cursor:pointer;text-align:center;transition:all .2s;font-family:'Outfit',sans-serif;}
+.who-opt.sel-him{border-color:var(--him);background:var(--blue-dim);}
+.who-opt.sel-her{border-color:var(--her);background:var(--rose-dim);}
+.who-opt .wi{font-size:1.4rem;display:block;margin-bottom:.2rem;}
+.who-opt .wl{font-size:.75rem;color:var(--muted);}
+
+.auth-btn{width:100%;padding:.8rem;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--rose) 0%,#c04060 100%);
+  color:white;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;
+  cursor:pointer;transition:opacity .2s,transform .15s;margin-top:.5rem;}
+.auth-btn:hover{opacity:.88;transform:translateY(-1px);}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.auth-err{font-size:.78rem;color:#ff6b6b;text-align:center;margin-top:.6rem;display:none;}
+.auth-err.show{display:block;}
+.auth-hint{font-size:.72rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.5;}
+.auth-hint a{color:var(--rose);text-decoration:none;cursor:pointer;}
+
+/* ── APP SHELL ── */
+#app{display:none;height:100vh;flex-direction:column;overflow:hidden;}
+.app-header{
+  padding:.85rem 1.2rem;
+  background:rgba(23,21,26,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  position:relative;z-index:50;
+}
+.hdr-left{}
+.hdr-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--text);line-height:1;}
+.hdr-title em{color:var(--rose);font-style:italic;}
+.hdr-sub{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.hdr-right{display:flex;align-items:center;gap:.6rem;}
+.streak-badge{display:flex;align-items:center;gap:.3rem;padding:.3rem .7rem;
+  border-radius:20px;background:var(--gold-dim);border:1px solid var(--gold);
+  font-size:.72rem;font-weight:600;color:var(--gold);}
+.star-badge{display:flex;align-items:center;gap:.3rem;padding:.3rem .7rem;
+  border-radius:20px;background:var(--star-dim);border:1px solid var(--star);
+  font-size:.72rem;font-weight:600;color:var(--star);cursor:default;}
+.user-pill{display:flex;align-items:center;gap:.4rem;padding:.35rem .75rem;
+  border-radius:20px;font-size:.78rem;font-weight:500;cursor:pointer;transition:opacity .2s;border:1px solid;}
+.user-pill.him{background:var(--blue-dim);border-color:var(--him);color:var(--him);}
+.user-pill.her{background:var(--rose-dim);border-color:var(--her);color:var(--her);}
+.user-pill:hover{opacity:.7;}
+
+/* ── TABS ── */
+.nav-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;
+  background:var(--surface);overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{padding:.65rem 1.1rem;font-size:.78rem;font-weight:500;color:var(--muted);
+  border:none;background:none;cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;transition:all .15s;font-family:'Outfit',sans-serif;}
+.nav-tab.active{color:var(--rose);border-bottom-color:var(--rose);}
+
+/* ── MAIN CONTENT ── */
+.app-body{flex:1;overflow-y:auto;position:relative;}
+.tab-pane{display:none;padding:1rem 1rem 6rem;}
+.tab-pane.active{display:block;}
+
+/* ── FILTERS ── */
+.filters-row{display:flex;gap:.45rem;margin-bottom:1rem;overflow-x:auto;scrollbar-width:none;padding:.1rem 0;}
+.filters-row::-webkit-scrollbar{display:none;}
+.flt{padding:.3rem .8rem;border-radius:20px;border:1.5px solid var(--border);
+  background:none;color:var(--muted);font-size:.73rem;cursor:pointer;white-space:nowrap;
+  font-family:'Outfit',sans-serif;transition:all .15s;}
+.flt.on{background:var(--rose);border-color:var(--rose);color:white;}
+
+/* ── TODAY SECTION ── */
+.today-banner{
+  background:linear-gradient(135deg,#1a1230 0%,#1e1520 100%);
+  border:1px solid #3a2a50;border-radius:14px;padding:.9rem 1rem;margin-bottom:1rem;
+}
+.today-banner-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#a070d0;margin-bottom:.5rem;font-weight:600;}
+.today-empty{font-size:.82rem;color:var(--muted);padding:.3rem 0;}
+
+/* ── TODO CARDS ── */
+.todo-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:.9rem 1rem;margin-bottom:.6rem;border-left:3px solid transparent;
+  transition:all .2s;position:relative;
+}
+.todo-card:hover{border-color:var(--border);box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.todo-card.p-urgent{border-left-color:#ff4545;}
+.todo-card.p-high{border-left-color:var(--amber);}
+.todo-card.p-medium{border-left-color:var(--rose);}
+.todo-card.p-low{border-left-color:var(--muted);}
+.todo-card.s-done{opacity:.55;}
+
+.tc-top{display:flex;gap:.8rem;align-items:flex-start;}
+.tc-checks{display:flex;flex-direction:column;gap:4px;flex-shrink:0;padding-top:1px;}
+.chk{width:24px;height:24px;border-radius:50%;border:2px solid;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:.65rem;transition:all .2s;background:none;}
+.chk.him{border-color:var(--him);color:var(--him);}
+.chk.him.on{background:var(--him);color:white;border-color:var(--him);}
+.chk.her{border-color:var(--her);color:var(--her);}
+.chk.her.on{background:var(--her);color:white;border-color:var(--her);}
+
+.tc-body{flex:1;min-width:0;}
+.tc-text{font-size:.9rem;line-height:1.45;color:var(--text);word-break:break-word;}
+.tc-text.struck{text-decoration:line-through;color:var(--muted);}
+.tc-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem;align-items:center;}
+.pill{font-size:.65rem;padding:.15rem .55rem;border-radius:8px;font-weight:500;}
+.pill.by-him{background:var(--blue-dim);color:var(--him);}
+.pill.by-her{background:var(--rose-dim);color:var(--her);}
+.pill.cat{background:var(--surface);color:var(--text2);}
+.pill.due{background:var(--gold-dim);color:var(--gold);}
+.pill.overdue{background:#3a1010;color:#ff6b6b;}
+.pill.p-urgent{background:#3a1010;color:#ff4545;}
+.pill.p-high{background:var(--amber-dim);color:var(--amber);}
+.pill.p-medium{background:var(--rose-dim);color:var(--rose);}
+.pill.p-low{background:var(--surface);color:var(--muted);}
+.pill.stars{background:var(--star-dim);color:var(--star);}
+
+.tc-status-row{display:flex;gap:.7rem;margin-top:.45rem;flex-wrap:wrap;}
+.tc-status-item{display:flex;align-items:center;gap:.3rem;font-size:.68rem;color:var(--muted);}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tc-actions{position:absolute;top:.6rem;right:.6rem;display:flex;gap:.2rem;}
+.tc-act-btn{width:26px;height:26px;border-radius:6px;border:none;background:none;
+  cursor:pointer;font-size:.85rem;color:var(--muted);transition:all .15s;
+  display:flex;align-items:center;justify-content:center;}
+.tc-act-btn:hover{background:var(--border);color:var(--text);}
+
+/* STATUS SELECT ON CARD */
+.status-sel{
+  font-size:.68rem;padding:.2rem .5rem;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--text2);font-family:'Outfit',sans-serif;cursor:pointer;
+  outline:none;
+}
+.status-sel.pending{border-color:var(--muted);color:var(--muted);}
+.status-sel.in-progress{border-color:var(--amber);color:var(--amber);background:var(--amber-dim);}
+.status-sel.completed{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+
+/* ── ADD FAB ── */
+.fab{position:fixed;bottom:1.5rem;right:1.5rem;width:54px;height:54px;
+  border-radius:50%;background:linear-gradient(135deg,var(--rose),#c04060);
+  color:white;font-size:1.4rem;border:none;cursor:pointer;z-index:100;
+  box-shadow:0 6px 24px rgba(232,96,122,.35);display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,box-shadow .2s;}
+.fab:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(232,96,122,.5);}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;
+  align-items:flex-end;backdrop-filter:blur(6px);}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:22px 22px 0 0;padding:1.4rem 1.3rem 2.5rem;
+  width:100%;max-width:500px;margin:0 auto;animation:sUp .3s ease;
+  max-height:90vh;overflow-y:auto;border-top:1px solid var(--border);}
+@keyframes sUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal-handle{width:36px;height:3px;background:var(--border);border-radius:2px;margin:0 auto .9rem;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--text);
+  margin-bottom:1.1rem;text-align:center;}
+
+.bulk-area{width:100%;padding:.75rem .9rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;
+  outline:none;resize:vertical;min-height:90px;transition:border-color .15s;line-height:1.6;}
+.bulk-area:focus{border-color:var(--rose);}
+.bulk-hint{font-size:.7rem;color:var(--muted);margin-top:.3rem;margin-bottom:.8rem;line-height:1.5;}
+.parsed-preview{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:.65rem .8rem;margin-bottom:.8rem;display:none;}
+.parsed-preview.show{display:block;}
+.preview-lbl{font-size:.68rem;color:var(--muted);margin-bottom:.4rem;}
+.preview-item{font-size:.78rem;color:var(--text2);padding:.2rem 0;border-bottom:1px solid var(--border);}
+.preview-item:last-child{border-bottom:none;}
+
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;}
+.sel{width:100%;padding:.65rem .8rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;
+  outline:none;cursor:pointer;transition:border-color .15s;}
+.sel:focus{border-color:var(--rose);}
+
+.m-submit{width:100%;padding:.8rem;border-radius:12px;border:none;
+  background:linear-gradient(135deg,var(--rose),#c04060);color:white;
+  font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;
+  margin-top:.8rem;transition:opacity .2s,transform .15s;}
+.m-submit:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:.9rem 1rem;}
+.stat-card.full{grid-column:1/-1;}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;line-height:1;}
+.stat-lbl{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
+.stat-sub{font-size:.68rem;color:var(--muted);margin-top:.3rem;}
+
+.progress-bar{height:6px;background:var(--border);border-radius:3px;margin-top:.5rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s ease;}
+
+.section-head{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
+  margin:.8rem 0 .4rem;font-weight:500;}
+
+/* HER PROGRESS MONITORING */
+.monitor-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:1rem;margin-bottom:.7rem;}
+.monitor-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem;}
+.monitor-title{font-size:.85rem;font-weight:600;color:var(--text);}
+.monitor-badge{font-size:.7rem;padding:.2rem .6rem;border-radius:8px;font-weight:600;}
+.monitor-badge.great{background:var(--green-dim);color:var(--green);}
+.monitor-badge.warn{background:var(--amber-dim);color:var(--amber);}
+.monitor-badge.lag{background:var(--rose-dim);color:var(--rose);}
+.activity-row{display:flex;align-items:center;gap:.7rem;padding:.4rem 0;border-bottom:1px solid var(--border);}
+.activity-row:last-child{border-bottom:none;}
+.act-icon{font-size:1.1rem;flex-shrink:0;}
+.act-body{flex:1;min-width:0;}
+.act-text{font-size:.78rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.act-time{font-size:.65rem;color:var(--muted);}
+.act-status{font-size:.65rem;padding:.15rem .5rem;border-radius:6px;}
+
+/* NUDGE/MOTIVATION */
+.nudge-card{background:linear-gradient(135deg,var(--rose-dim),#1a1015);
+  border:1px solid var(--rose);border-radius:14px;padding:1rem;margin-bottom:.7rem;}
+.nudge-title{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--rose);margin-bottom:.5rem;}
+.nudge-msg{font-size:.88rem;line-height:1.5;color:var(--text2);}
+.nudge-from{font-size:.7rem;color:var(--muted);margin-top:.5rem;font-style:italic;}
+.nudge-send-btn{margin-top:.6rem;padding:.45rem .9rem;border-radius:10px;border:1px solid var(--rose);
+  background:none;color:var(--rose);font-size:.75rem;cursor:pointer;font-family:'Outfit',sans-serif;
+  transition:all .15s;}
+.nudge-send-btn:hover{background:var(--rose);color:white;}
+
+/* NOTES / CHECKIN */
+.note-input{width:100%;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;
+  outline:none;resize:none;min-height:70px;transition:border-color .15s;}
+.note-input:focus{border-color:var(--rose);}
+.note-send{padding:.5rem 1rem;border-radius:10px;border:1px solid var(--rose);background:none;
+  color:var(--rose);font-size:.8rem;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:.5rem;
+  transition:all .15s;}
+.note-send:hover{background:var(--rose);color:white;}
+
+.msg-bubble{padding:.6rem .9rem;border-radius:12px;margin-bottom:.5rem;font-size:.82rem;line-height:1.45;}
+.msg-bubble.from-him{background:var(--blue-dim);border:1px solid var(--him);color:var(--text);}
+.msg-bubble.from-her{background:var(--rose-dim);border:1px solid var(--her);color:var(--text);margin-left:1.5rem;}
+.msg-meta{font-size:.65rem;color:var(--muted);margin-top:.2rem;}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 2rem;color:var(--muted);}
+.empty .ei{font-size:2.5rem;margin-bottom:.8rem;}
+.empty p{font-size:.85rem;line-height:1.6;}
+
+/* TOAST */
+.toast{position:fixed;bottom:4.5rem;left:50%;transform:translateX(-50%);
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:.55rem 1.2rem;border-radius:20px;font-size:.8rem;z-index:500;
+  opacity:0;pointer-events:none;transition:opacity .25s;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* LOADING */
+.spinner-wrap{text-align:center;padding:3rem;color:var(--muted);}
+.spin{display:inline-block;width:26px;height:26px;border:3px solid var(--border);
+  border-top-color:var(--rose);border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ── STAR REDEEM PAGE ── */
+.redeem-hero{
+  background:linear-gradient(135deg,#1a1020 0%,#201510 100%);
+  border:1px solid #4a3020;border-radius:16px;padding:1.4rem 1.2rem;margin-bottom:1rem;text-align:center;
+}
+.redeem-star-count{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:600;color:var(--star);line-height:1;}
+.redeem-star-label{font-size:.8rem;color:var(--text2);margin-top:.2rem;}
+.redeem-progress-wrap{margin:.8rem 0 .4rem;background:var(--border);border-radius:4px;height:8px;overflow:hidden;}
+.redeem-progress-fill{height:100%;background:linear-gradient(90deg,var(--star),#e09020);border-radius:4px;transition:width .5s;}
+.redeem-hint{font-size:.72rem;color:var(--muted);}
+
+.redeem-form-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-bottom:1rem;}
+.redeem-form-title{font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:.8rem;}
+.redeem-textarea{width:100%;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Outfit',sans-serif;font-size:.85rem;
+  outline:none;resize:none;min-height:80px;transition:border-color .15s;}
+.redeem-textarea:focus{border-color:var(--star);}
+.redeem-input{width:100%;padding:.7rem .9rem;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--surface);color:var(--text);font-family:'Outfit',sans-serif;font-size:.9rem;
+  outline:none;transition:border-color .15s;margin-top:.5rem;}
+.redeem-input:focus{border-color:var(--star);}
+.redeem-btn{width:100%;padding:.8rem;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#c08020,#906010);color:white;
+  font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;
+  margin-top:.8rem;transition:opacity .2s,transform .15s;}
+.redeem-btn:hover{opacity:.88;transform:translateY(-1px);}
+.redeem-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+.redeem-history-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;}
+.redeem-item{padding:.6rem 0;border-bottom:1px solid var(--border);display:flex;gap:.8rem;align-items:flex-start;}
+.redeem-item:last-child{border-bottom:none;}
+.redeem-item-icon{font-size:1.2rem;flex-shrink:0;}
+.redeem-item-body{flex:1;}
+.redeem-item-msg{font-size:.82rem;color:var(--text);line-height:1.4;}
+.redeem-item-meta{font-size:.68rem;color:var(--muted);margin-top:.2rem;}
+.redeem-item-phone{font-size:.72rem;color:var(--text2);margin-top:.15rem;}
+.redeem-status{font-size:.65rem;padding:.15rem .5rem;border-radius:6px;margin-left:auto;flex-shrink:0;}
+.redeem-status.pending{background:var(--amber-dim);color:var(--amber);}
+.redeem-status.approved{background:var(--green-dim);color:var(--green);}
+.redeem-status.rejected{background:#3a1010;color:#ff6b6b;}
+
+/* ── STAR ANIMATION ── */
+@keyframes starPop{0%{transform:scale(0) translateY(0);opacity:1;}100%{transform:scale(1.5) translateY(-60px);opacity:0;}}
+.star-pop{position:fixed;pointer-events:none;font-size:1.6rem;z-index:999;animation:starPop .9s ease-out forwards;}
+
+/* ── EDIT MODAL ── */
+.edit-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;
+  align-items:flex-end;backdrop-filter:blur(6px);}
+.edit-overlay.open{display:flex;}
+
+/* ── STAR LEGEND ── */
+.star-legend{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem;}
+.star-legend-item{display:flex;align-items:center;gap:.25rem;font-size:.68rem;color:var(--text2);
+  background:var(--surface);padding:.2rem .5rem;border-radius:6px;border:1px solid var(--border);}
+
+@media(min-width:480px){
+  .modal{border-radius:20px;margin:auto;margin-bottom:2rem;}
+  .overlay{align-items:center;}
+  .tab-pane{padding:1.2rem 1.4rem 6rem;}
+  .edit-overlay{align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-brand">
+    <div class="auth-logo">💑</div>
+    <div class="auth-title">Our Little <em>Space</em></div>
+    <div class="auth-sub">PRIVATE · SHARED · MOTIVATED</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-form">
+      <div class="field-grp">
+        <div class="field-lbl">Email</div>
+        <input class="field-in" id="l-email" type="email" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Password</div>
+        <input class="field-in" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <button class="auth-btn" id="l-btn" onclick="doLogin()">Sign In</button>
+      <div class="auth-err" id="l-err"></div>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-form" style="display:none">
+      <div class="field-grp">
+        <div class="field-lbl">Your Name</div>
+        <input class="field-in" id="r-name" type="text" placeholder="What should we call you?"/>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Email</div>
+        <input class="field-in" id="r-email" type="email" placeholder="your@email.com" autocomplete="email"/>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Password</div>
+        <input class="field-in" id="r-pass" type="password" placeholder="Min 6 characters"/>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">You are</div>
+        <div class="who-row" style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:0;">
+          <div class="who-opt" id="wo-him" onclick="pickRole('him')">
+            <span class="wi">👦</span>
+            <span style="font-size:.9rem;font-weight:600;color:var(--him)">Sanjay</span>
+            <span class="wl">the guide</span>
+          </div>
+          <div class="who-opt" id="wo-her" onclick="pickRole('her')">
+            <span class="wi">👧</span>
+            <span style="font-size:.9rem;font-weight:600;color:var(--her)">My Love</span>
+            <span class="wl">the builder</span>
+          </div>
+        </div>
+      </div>
+      <button class="auth-btn" id="r-btn" onclick="doRegister()">Create Account</button>
+      <div class="auth-err" id="r-err"></div>
+    </div>
+
+    <div class="auth-hint">
+      Your data is private and shared only between the two accounts.<br>
+      <a onclick="switchTab('register')">New here? Create an account →</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none;height:100vh;flex-direction:column;overflow:hidden;">
+  <div class="app-header">
+    <div class="hdr-left">
+      <div class="hdr-title">Our Little <em>Space</em> ✦</div>
+      <div class="hdr-sub" id="hdr-sub">Loading…</div>
+    </div>
+    <div class="hdr-right">
+      <div class="streak-badge" id="streak-badge">🔥 0</div>
+      <div class="star-badge" id="star-badge" style="display:none">⭐ 0</div>
+      <div class="user-pill" id="u-pill" onclick="doLogout()">
+        <span id="u-em"></span><span id="u-nm"></span>
+        <span style="font-size:.6rem;opacity:.5">⏏</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="gotoTab('todos',this)">📋 Todos</button>
+    <button class="nav-tab" onclick="gotoTab('dash',this)">📊 Dashboard</button>
+    <button class="nav-tab" onclick="gotoTab('monitor',this)" id="monitor-tab">👁 Monitor</button>
+    <button class="nav-tab" onclick="gotoTab('notes',this)">💬 Notes</button>
+    <button class="nav-tab" onclick="gotoTab('redeem',this)" id="redeem-tab" style="display:none">⭐ Rewards</button>
+  </div>
+
+  <div class="app-body">
+
+    <!-- TODOS TAB -->
+    <div class="tab-pane active" id="tab-todos">
+      <!-- TODAY TASKS -->
+      <div class="today-banner" id="today-banner">
+        <div class="today-banner-title">📅 Today's Tasks</div>
+        <div id="today-tasks-list"><div class="today-empty">No tasks for today</div></div>
+      </div>
+      <div class="filters-row" id="filters-row">
+        <button class="flt on" onclick="setFlt('all',this)">All</button>
+        <button class="flt" onclick="setFlt('active',this)">Active</button>
+        <button class="flt" onclick="setFlt('in-progress',this)">In Progress</button>
+        <button class="flt" onclick="setFlt('completed',this)">Completed</button>
+        <button class="flt" onclick="setFlt('mine',this)">Mine</button>
+        <button class="flt" onclick="setFlt('hers',this)">Hers</button>
+        <button class="flt" onclick="setFlt('urgent',this)">🔴 Urgent</button>
+        <button class="flt" onclick="setFlt('sms',this)">📱 SMS</button>
+      </div>
+      <div id="todos-list"><div class="spinner-wrap"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-pane" id="tab-dash">
+      <div id="dash-content"><div class="spinner-wrap"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- MONITOR TAB -->
+    <div class="tab-pane" id="tab-monitor">
+      <div id="monitor-content"><div class="spinner-wrap"><div class="spin"></div></div></div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div class="tab-pane" id="tab-notes">
+      <div class="nudge-card" id="nudge-compose">
+        <div class="nudge-title">✦ Send a Motivation Nudge</div>
+        <div id="random-nudge" class="nudge-msg"></div>
+        <button class="nudge-send-btn" onclick="sendNudge()">Send this to her 💛</button>
+      </div>
+      <div class="section-head">Check-in Note</div>
+      <textarea class="note-input" id="note-text" placeholder="Write a note, encouragement, or update…"></textarea>
+      <button class="note-send" onclick="sendNote()">Send ✦</button>
+      <div class="section-head" style="margin-top:1rem;">Messages</div>
+      <div id="notes-feed"></div>
+    </div>
+
+    <!-- REDEEM / REWARDS TAB (her only) -->
+    <div class="tab-pane" id="tab-redeem">
+      <div class="redeem-hero">
+        <div class="redeem-star-count" id="redeem-star-count">0</div>
+        <div class="redeem-star-label">⭐ Your Stars</div>
+        <div class="redeem-progress-wrap">
+          <div class="redeem-progress-fill" id="redeem-progress-fill" style="width:0%"></div>
+        </div>
+        <div class="redeem-hint" id="redeem-hint">0 / 100 stars to next reward</div>
+      </div>
+
+      <div class="star-legend">
+        <div class="star-legend-item">🔴 Urgent = ⭐⭐⭐⭐⭐</div>
+        <div class="star-legend-item">🟠 High = ⭐⭐⭐</div>
+        <div class="star-legend-item">🟡 Medium = ⭐⭐</div>
+        <div class="star-legend-item">⚪ Low = ⭐</div>
+      </div>
+
+      <div class="redeem-form-card">
+        <div class="redeem-form-title">🎁 Make a Wish Request</div>
+        <div class="field-lbl" style="margin-bottom:.3rem">What do you want? 💭</div>
+        <textarea class="redeem-textarea" id="redeem-msg" placeholder="I want… a special dinner date 🌹, new earrings 💎, a movie night 🎬…"></textarea>
+        <div class="field-lbl" style="margin-top:.7rem;margin-bottom:.3rem">Your phone / link / details</div>
+        <input class="redeem-input" id="redeem-phone" type="text" placeholder="Phone number or any extra info…"/>
+        <button class="redeem-btn" id="redeem-submit-btn" onclick="submitRedeem()">
+          ⭐ Redeem 100 Stars for This Wish
+        </button>
+      </div>
+
+      <div class="section-head">Your Wish History</div>
+      <div class="redeem-history-card" id="redeem-history">
+        <div style="font-size:.82rem;color:var(--muted);padding:.5rem 0;">No wishes yet. Earn stars by completing tasks! 🌟</div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="fab" onclick="openModal()" id="add-fab">＋</button>
+</div>
+
+<!-- ADD TODO MODAL -->
+<div class="overlay" id="modal" onclick="closeOvr(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Add to Our List ✦</div>
+
+    <div class="field-grp">
+      <div class="field-lbl">Task(s) — paste a paragraph, each line = one task</div>
+      <textarea class="bulk-area" id="bulk-input" rows="4"
+        placeholder="Book movie tickets for Friday&#10;Buy roses&#10;Review her login page component&#10;…paste anything here!"
+        oninput="parseBulk()"></textarea>
+      <div class="bulk-hint">💡 Paste a full paragraph or multiple lines. Each line will become its own task automatically.</div>
+    </div>
+
+    <div class="parsed-preview" id="parsed-preview">
+      <div class="preview-lbl">Will create these tasks:</div>
+      <div id="preview-list"></div>
+    </div>
+
+    <div class="row-2">
+      <div class="field-grp">
+        <div class="field-lbl">Category</div>
+        <select class="sel" id="m-cat">
+          <option value="general">📋 General</option>
+          <option value="sms">📱 SMS Project</option>
+          <option value="date">🌹 Date</option>
+          <option value="shopping">🛍 Shopping</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="food">🍽 Food</option>
+          <option value="home">🏠 Home</option>
+          <option value="health">💊 Health</option>
+          <option value="learning">📚 Learning</option>
+        </select>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Priority</div>
+        <select class="sel" id="m-pri">
+          <option value="urgent">🔴 Urgent (⭐×5)</option>
+          <option value="high">🟠 High (⭐×3)</option>
+          <option value="medium" selected>🟡 Medium (⭐×2)</option>
+          <option value="low">⚪ Low (⭐×1)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field-grp">
+        <div class="field-lbl">Status</div>
+        <select class="sel" id="m-status">
+          <option value="pending">⏳ Pending</option>
+          <option value="in-progress">🔄 In Progress</option>
+          <option value="completed">✅ Completed</option>
+        </select>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Due Date</div>
+        <input class="field-in" id="m-due" type="date"/>
+      </div>
+    </div>
+    <div class="field-grp">
+      <div class="field-lbl">Assigned To</div>
+      <select class="sel" id="m-assign">
+        <option value="both">Both of us</option>
+        <option value="him">👦 Sanjay</option>
+        <option value="her">👧 My Love</option>
+      </select>
+    </div>
+    <button class="m-submit" onclick="addTodos()">Add to List 💛</button>
+  </div>
+</div>
+
+<!-- EDIT TODO MODAL -->
+<div class="edit-overlay" id="edit-modal" onclick="closeEditOvr(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Edit Task ✏️</div>
+
+    <div class="field-grp">
+      <div class="field-lbl">Task</div>
+      <textarea class="bulk-area" id="e-text" rows="3"></textarea>
+    </div>
+    <div class="row-2">
+      <div class="field-grp">
+        <div class="field-lbl">Category</div>
+        <select class="sel" id="e-cat">
+          <option value="general">📋 General</option>
+          <option value="sms">📱 SMS Project</option>
+          <option value="date">🌹 Date</option>
+          <option value="shopping">🛍 Shopping</option>
+          <option value="travel">✈️ Travel</option>
+          <option value="food">🍽 Food</option>
+          <option value="home">🏠 Home</option>
+          <option value="health">💊 Health</option>
+          <option value="learning">📚 Learning</option>
+        </select>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Priority</div>
+        <select class="sel" id="e-pri">
+          <option value="urgent">🔴 Urgent (⭐×5)</option>
+          <option value="high">🟠 High (⭐×3)</option>
+          <option value="medium">🟡 Medium (⭐×2)</option>
+          <option value="low">⚪ Low (⭐×1)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field-grp">
+        <div class="field-lbl">Status</div>
+        <select class="sel" id="e-status">
+          <option value="pending">⏳ Pending</option>
+          <option value="in-progress">🔄 In Progress</option>
+          <option value="completed">✅ Completed</option>
+        </select>
+      </div>
+      <div class="field-grp">
+        <div class="field-lbl">Due Date</div>
+        <input class="field-in" id="e-due" type="date"/>
+      </div>
+    </div>
+    <div class="field-grp">
+      <div class="field-lbl">Assigned To</div>
+      <select class="sel" id="e-assign">
+        <option value="both">Both of us</option>
+        <option value="him">👦 Sanjay</option>
+        <option value="her">👧 My Love</option>
+      </select>
+    </div>
+    <button class="m-submit" onclick="saveEdit()">Save Changes ✦</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════
+const ACCOUNTS_KEY = 'ols-accounts-v2';
+const TODOS_KEY    = 'ols-todos-v2';
+const NOTES_KEY    = 'ols-notes-v2';
+const SESSION_KEY  = 'ols-session-v2';
+const REDEEM_KEY   = 'ols-redeem-v2';
+
+const KNOWN_USERS = {
+  'sanjay': { email: null, role: 'him', name: 'Sanjay', emoji: '👦' },
+  'her':    { email: null, role: 'her', name: 'My Love', emoji: '👧' }
+};
+
+const CAT_ICONS = { general:'📋', sms:'📱', date:'🌹', shopping:'🛍', travel:'✈️', food:'🍽', home:'🏠', health:'💊', learning:'📚' };
+const NUDGES = [
+  "Every line of code you write is one step closer to something real. I see you grinding 🔥",
+  "Your consistency is your superpower. Keep pushing, I'm watching you grow 💪",
+  "Even if it's messy today, it's progress. Clean code comes after working code. Go! ✨",
+  "I believe in you more than you know. Check off that next task 💛",
+  "You're building something real. That's more than most people ever do 🚀",
+  "Small wins today = big wins next week. Keep the streak going! 🔥",
+  "Stuck? Break it into smaller pieces. You've solved harder things before 🧩",
+  "Your future self will thank you for the work you put in today 🌸",
+  "One commit at a time. One task at a time. You've got this 💻",
+  "I'm proud of how far you've come. Don't stop now 💑"
+];
+
+// Stars per priority
+const STAR_MAP = { urgent: 5, high: 3, medium: 2, low: 1 };
+
+// ══════════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════════
+let session = null;
+let todos   = [];
+let notes   = [];
+let redeems = [];
+let accounts= {};
+let flt     = 'all';
+let pollTimer;
+let editId  = null;  // currently editing task id
+
+// ══════════════════════════════════════════════════
+//  STARS LOGIC
+// ══════════════════════════════════════════════════
+function calcHerStars(){
+  // Sum stars for every completed task assigned to her (her or both)
+  let total = 0;
+  todos.forEach(t => {
+    if((t.assignTo === 'her' || t.assignTo === 'both') && t.status === 'completed'){
+      total += STAR_MAP[t.priority] || 1;
+    }
+  });
+  // Subtract spent stars from approved/pending redeems
+  redeems.forEach(r => {
+    if(r.status !== 'rejected') total -= 100;
+  });
+  return Math.max(0, total);
+}
+
+function updateStarBadge(){
+  if(session && session.role === 'her'){
+    const stars = calcHerStars();
+    document.getElementById('star-badge').textContent = '⭐ ' + stars;
+  }
+}
+
+function spawnStarAnim(x, y, count){
+  for(let i = 0; i < Math.min(count, 5); i++){
+    const el = document.createElement('div');
+    el.className = 'star-pop';
+    el.textContent = '⭐';
+    el.style.left  = (x + (Math.random()-0.5)*40) + 'px';
+    el.style.top   = (y + (Math.random()-0.5)*20) + 'px';
+    el.style.animationDelay = (i * 0.12) + 's';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1200);
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
+window.onload = async () => {
+  const s = localStorage.getItem(SESSION_KEY);
+  if (s) { session = JSON.parse(s); enterApp(); }
+};
+
+// ══════════════════════════════════════════════════
+//  AUTH UI
+// ══════════════════════════════════════════════════
+let regRole = null;
+
+function switchTab(t){
+  document.getElementById('login-form').style.display    = t==='login' ? '' : 'none';
+  document.getElementById('register-form').style.display = t==='register' ? '' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((b,i)=>{
+    b.classList.toggle('active', (i===0&&t==='login')||(i===1&&t==='register'));
+  });
+}
+
+function pickRole(r){
+  regRole = r;
+  document.getElementById('wo-him').className = 'who-opt' + (r==='him'?' sel-him':'');
+  document.getElementById('wo-her').className = 'who-opt' + (r==='her'?' sel-her':'');
+}
+
+function hashPass(p){ let h=0; for(let c of p){h=((h<<5)-h)+c.charCodeAt(0);h|=0;} return h.toString(36); }
+
+async function doRegister(){
+  const name  = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('r-pass').value;
+  const err   = document.getElementById('r-err');
+  err.className = 'auth-err';
+
+  if (!name||!email||!pass) { showE(err,'Please fill all fields.'); return; }
+  if (pass.length<6) { showE(err,'Password must be at least 6 characters.'); return; }
+  if (!regRole)      { showE(err,'Please choose who you are.'); return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { showE(err,'Enter a valid email.'); return; }
+
+  await loadAccounts();
+  if (accounts[email]) { showE(err,'Account already exists. Sign in instead.'); return; }
+
+  const rolesTaken = Object.values(accounts).map(a=>a.role);
+  if (rolesTaken.includes(regRole)) { showE(err, `The "${regRole==='him'?'Sanjay':'My Love'}" account is already registered.`); return; }
+
+  const emoji = regRole==='him' ? '👦' : '👧';
+  accounts[email] = { name, role: regRole, emoji, passHash: hashPass(pass) };
+  await saveAccounts();
+
+  session = { email, role: regRole, name, emoji };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  enterApp();
+}
+
+async function doLogin(){
+  const email = document.getElementById('l-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('l-pass').value;
+  const err   = document.getElementById('l-err');
+  err.className = 'auth-err';
+
+  if (!email||!pass) { showE(err,'Enter email and password.'); return; }
+  await loadAccounts();
+  const acct = accounts[email];
+  if (!acct) { showE(err,'No account found. Register first.'); return; }
+  if (acct.passHash !== hashPass(pass)) { showE(err,'Wrong password.'); return; }
+
+  session = { email, role: acct.role, name: acct.name, emoji: acct.emoji };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  enterApp();
+}
+
+function showE(el,msg){ el.textContent=msg; el.className='auth-err show'; }
+
+function doLogout(){
+  clearInterval(pollTimer);
+  session = null;
+  localStorage.removeItem(SESSION_KEY);
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  todos=[]; notes=[]; redeems=[];
+}
+
+// ══════════════════════════════════════════════════
+//  APP ENTER
+// ══════════════════════════════════════════════════
+function enterApp(){
+  document.getElementById('auth-screen').style.display='none';
+  const app = document.getElementById('app');
+  app.style.display='flex';
+
+  const pill = document.getElementById('u-pill');
+  pill.className = 'user-pill '+session.role;
+  document.getElementById('u-em').textContent = session.emoji+' ';
+  document.getElementById('u-nm').textContent = session.name;
+
+  // Monitor tab only for him
+  document.getElementById('monitor-tab').style.display = session.role==='him' ? '' : 'none';
+  // Redeem tab only for her
+  document.getElementById('redeem-tab').style.display = session.role==='her' ? '' : 'none';
+  // Star badge only for her
+  document.getElementById('star-badge').style.display = session.role==='her' ? '' : 'none';
+
+  loadAll();
+  startPoll();
+  setRandomNudge();
+}
+
+// ══════════════════════════════════════════════════
+//  STORAGE HELPERS
+// ══════════════════════════════════════════════════
+async function loadAccounts(){
+  try {
+    const r = await window.storage.get(ACCOUNTS_KEY, true);
+    accounts = r ? JSON.parse(r.value) : {};
+  } catch(e){ accounts={}; }
+}
+async function saveAccounts(){
+  try { await window.storage.set(ACCOUNTS_KEY, JSON.stringify(accounts), true); } catch(e){}
+}
+async function loadTodos(){
+  try {
+    const r = await window.storage.get(TODOS_KEY, true);
+    todos = r ? JSON.parse(r.value) : getDefaults();
+    if (!r) await saveTodos();
+  } catch(e){ todos = getDefaults(); }
+}
+async function saveTodos(){
+  try { await window.storage.set(TODOS_KEY, JSON.stringify(todos), true); } catch(e){}
+}
+async function loadNotes(){
+  try {
+    const r = await window.storage.get(NOTES_KEY, true);
+    notes = r ? JSON.parse(r.value) : [];
+  } catch(e){ notes=[]; }
+}
+async function saveNotes(){
+  try { await window.storage.set(NOTES_KEY, JSON.stringify(notes), true); } catch(e){}
+}
+async function loadRedeems(){
+  try {
+    const r = await window.storage.get(REDEEM_KEY, true);
+    redeems = r ? JSON.parse(r.value) : [];
+  } catch(e){ redeems=[]; }
+}
+async function saveRedeems(){
+  try { await window.storage.set(REDEEM_KEY, JSON.stringify(redeems), true); } catch(e){}
+}
+
+async function loadAll(){
+  await loadTodos(); await loadNotes(); await loadRedeems();
+  render(); renderDash(); renderMonitor(); renderNotes(); renderRedeem();
+}
+
+function startPoll(){
+  clearInterval(pollTimer);
+  pollTimer = setInterval(async ()=>{
+    const rt = await window.storage.get(TODOS_KEY,true).catch(()=>null);
+    const rn = await window.storage.get(NOTES_KEY,true).catch(()=>null);
+    const rr = await window.storage.get(REDEEM_KEY,true).catch(()=>null);
+    let changed=false;
+    if(rt){ const rem=JSON.parse(rt.value); if(JSON.stringify(rem)!==JSON.stringify(todos)){todos=rem;changed=true;}}
+    if(rn){ const rem=JSON.parse(rn.value); if(JSON.stringify(rem)!==JSON.stringify(notes)){notes=rem;changed=true;}}
+    if(rr){ const rem=JSON.parse(rr.value); if(JSON.stringify(rem)!==JSON.stringify(redeems)){redeems=rem;changed=true;}}
+    if(changed){ render(); renderDash(); renderMonitor(); renderNotes(); renderRedeem(); showToast('✨ Synced!'); }
+  }, 5000);
+}
+
+// ══════════════════════════════════════════════════
+//  DEFAULT DATA
+// ══════════════════════════════════════════════════
+function uid(){ return Math.random().toString(36).slice(2,10); }
+function now(){ return Date.now(); }
+
+function getDefaults(){
+  return [
+    { id:uid(), text:'Set up SMS project repo on GitHub', cat:'sms', priority:'urgent', status:'pending', addedBy:'him', assignTo:'her', himDone:false, herDone:false, dueDate:'', createdAt:now(), updatedAt:now() },
+    { id:uid(), text:'Design login screen UI for SMS app', cat:'sms', priority:'high', status:'in-progress', addedBy:'him', assignTo:'her', himDone:false, herDone:false, dueDate:'', createdAt:now()-1e4, updatedAt:now()-1e4 },
+    { id:uid(), text:'Book our anniversary dinner 🕯', cat:'date', priority:'high', status:'pending', addedBy:'him', assignTo:'both', himDone:false, herDone:false, dueDate:'', createdAt:now()-2e4, updatedAt:now()-2e4 },
+    { id:uid(), text:'Review React component structure with her', cat:'sms', priority:'medium', status:'pending', addedBy:'him', assignTo:'both', himDone:false, herDone:false, dueDate:'', createdAt:now()-3e4, updatedAt:now()-3e4 },
+    { id:uid(), text:'Buy matching phone cases', cat:'shopping', priority:'low', status:'completed', addedBy:'her', assignTo:'both', himDone:true, herDone:true, dueDate:'', createdAt:now()-4e4, updatedAt:now()-4e4 },
+  ];
+}
+
+// ══════════════════════════════════════════════════
+//  TODAY TASKS
+// ══════════════════════════════════════════════════
+function renderTodayTasks(){
+  const todayStr = new Date().toDateString();
+  const el = document.getElementById('today-tasks-list');
+
+  // Today = tasks due today OR created today that are not completed
+  const todayTasks = todos.filter(t => {
+    if(t.status === 'completed') return false;
+    const createdToday = new Date(t.createdAt).toDateString() === todayStr;
+    const dueToday = t.dueDate && new Date(t.dueDate+'T00:00:00').toDateString() === todayStr;
+    return createdToday || dueToday;
+  });
+
+  if(!todayTasks.length){
+    el.innerHTML = '<div class="today-empty">No tasks for today 🌸</div>';
+    return;
+  }
+
+  el.innerHTML = todayTasks.slice(0,5).map(t => `
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:1px solid rgba(255,255,255,.05);">
+      <span style="font-size:.75rem;">${CAT_ICONS[t.cat]||'📋'}</span>
+      <span style="font-size:.78rem;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(t.text)}</span>
+      <span style="font-size:.65rem;background:var(--star-dim);color:var(--star);padding:.1rem .4rem;border-radius:6px;flex-shrink:0;">⭐×${STAR_MAP[t.priority]||1}</span>
+      <span class="pill p-${t.priority}" style="flex-shrink:0;">${priLabel(t.priority).split(' ')[0]}</span>
+    </div>
+  `).join('') + (todayTasks.length > 5 ? `<div style="font-size:.72rem;color:var(--muted);padding:.3rem 0;">+${todayTasks.length-5} more…</div>` : '');
+}
+
+// ══════════════════════════════════════════════════
+//  RENDER TODOS
+// ══════════════════════════════════════════════════
+function setFlt(f, btn){
+  flt = f;
+  document.querySelectorAll('.flt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function render(){
+  const list = document.getElementById('todos-list');
+  const active = todos.filter(t=>t.status!=='completed');
+  const completed = todos.filter(t=>t.status==='completed');
+  const streak = calcStreak();
+  document.getElementById('streak-badge').textContent = '🔥 '+streak;
+  document.getElementById('hdr-sub').textContent =
+    `${active.length} active · ${completed.length} done · ${todos.filter(t=>t.status==='in-progress').length} in progress`;
+
+  updateStarBadge();
+  renderTodayTasks();
+
+  let f = [...todos];
+  if(flt==='active')      f = todos.filter(t=>t.status==='pending');
+  else if(flt==='in-progress') f = todos.filter(t=>t.status==='in-progress');
+  else if(flt==='completed')   f = todos.filter(t=>t.status==='completed');
+  else if(flt==='mine')   f = todos.filter(t=>t.assignTo==='both'||(session.role==='him'?t.assignTo==='him':t.assignTo==='her'));
+  else if(flt==='hers')   f = todos.filter(t=>t.assignTo==='her'||t.assignTo==='both');
+  else if(flt==='urgent') f = todos.filter(t=>t.priority==='urgent');
+  else if(flt==='sms')    f = todos.filter(t=>t.cat==='sms');
+
+  const priOrd = {urgent:0,high:1,medium:2,low:3};
+  const stOrd  = {pending:0,'in-progress':1,completed:2};
+  f.sort((a,b)=>{
+    if(stOrd[a.status]!==stOrd[b.status]) return stOrd[a.status]-stOrd[b.status];
+    return (priOrd[a.priority]??2)-(priOrd[b.priority]??2);
+  });
+
+  if(!f.length){ list.innerHTML='<div class="empty"><div class="ei">🌸</div><p>Nothing here.<br>Tap ＋ to add tasks!</p></div>'; return; }
+
+  list.innerHTML = f.map(t => {
+    const done = t.status==='completed';
+    const overdue = t.dueDate && new Date(t.dueDate)<new Date() && !done;
+    const assignLabel = t.assignTo==='both'?'Both':t.assignTo==='him'?'👦 Sanjay':'👧 My Love';
+    const stars = STAR_MAP[t.priority] || 1;
+    return `
+    <div class="todo-card p-${t.priority} ${done?'s-done':''}" id="tc-${t.id}">
+      <div class="tc-actions">
+        <button class="tc-act-btn" onclick="openEdit('${t.id}')" title="Edit task">✏️</button>
+        <button class="tc-act-btn" onclick="delTodo('${t.id}')" title="Delete">×</button>
+      </div>
+      <div class="tc-top">
+        <div class="tc-checks">
+          <div class="chk him ${t.himDone?'on':''}" title="Sanjay mark" onclick="chkToggle('${t.id}','him')">
+            ${t.himDone?'✓':''}
+          </div>
+          <div class="chk her ${t.herDone?'on':''}" title="Her mark" onclick="chkToggle('${t.id}','her')">
+            ${t.herDone?'✓':''}
+          </div>
+        </div>
+        <div class="tc-body">
+          <div class="tc-text ${done?'struck':''}">${CAT_ICONS[t.cat]||'📋'} ${esc(t.text)}</div>
+          <div class="tc-meta">
+            <span class="pill by-${t.addedBy}">${t.addedBy==='him'?'👦':'👧'} ${t.addedBy==='him'?'Sanjay':'Her'}</span>
+            <span class="pill cat">${CAT_ICONS[t.cat]||'📋'} ${t.cat}</span>
+            <span class="pill p-${t.priority}">${priLabel(t.priority)}</span>
+            <span class="pill stars">⭐×${stars}</span>
+            ${overdue?'<span class="pill overdue">⚠️ Overdue</span>':''}
+            ${t.dueDate&&!overdue?`<span class="pill due">📅 ${fmtDate(t.dueDate)}</span>`:''}
+            <span class="pill cat">→ ${assignLabel}</span>
+          </div>
+          <div class="tc-status-row">
+            <span class="tc-status-item">
+              <span class="sdot" style="background:${statusColor(t.status)}"></span>
+              <select class="status-sel ${t.status}" onchange="setStatus('${t.id}',this.value)">
+                <option value="pending" ${t.status==='pending'?'selected':''}>⏳ Pending</option>
+                <option value="in-progress" ${t.status==='in-progress'?'selected':''}>🔄 In Progress</option>
+                <option value="completed" ${t.status==='completed'?'selected':''}>✅ Completed</option>
+              </select>
+            </span>
+            <span class="tc-status-item" style="margin-left:.3rem">
+              <span class="sdot" style="background:${t.himDone?'var(--him)':'var(--border)'}"></span>👦
+              <span class="sdot" style="background:${t.herDone?'var(--her)':'var(--border)'}"></span>👧
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function priLabel(p){ return {urgent:'🔴 Urgent',high:'🟠 High',medium:'🟡 Medium',low:'⚪ Low'}[p]||p; }
+function statusColor(s){ return {pending:'var(--muted)','in-progress':'var(--amber)',completed:'var(--green)'}[s]||'#666'; }
+function fmtDate(d){ if(!d) return ''; const dt=new Date(d+'T00:00:00'); return dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'}); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ══════════════════════════════════════════════════
+//  TODO ACTIONS
+// ══════════════════════════════════════════════════
+async function chkToggle(id, who){
+  const t = todos.find(x=>x.id===id); if(!t) return;
+  if(who!==session.role){ showToast('Only '+(who==='him'?'Sanjay':'She')+' can tick that!'); return; }
+
+  const wasDone = t.status === 'completed';
+  if(who==='him') t.himDone=!t.himDone;
+  else t.herDone=!t.herDone;
+  if(t.himDone&&t.herDone) t.status='completed';
+  else if(t.himDone||t.herDone) t.status='in-progress';
+  else t.status='pending';
+  t.updatedAt=now();
+
+  // Star animation for her completing a task
+  const isNowDone = t.status === 'completed';
+  if(!wasDone && isNowDone && (t.assignTo==='her'||t.assignTo==='both')){
+    const stars = STAR_MAP[t.priority]||1;
+    const rect = document.getElementById('star-badge').getBoundingClientRect();
+    spawnStarAnim(rect.left, rect.top, stars);
+    setTimeout(()=>{ updateStarBadge(); renderRedeem(); }, 900);
+    showToast(`⭐ +${stars} star${stars>1?'s':''}! (${priLabel(t.priority)})`);
+  }
+
+  render(); await saveTodos();
+  if(t.himDone&&t.herDone&&!isNowDone) showToast('🎉 Both done! Teamwork!');
+}
+
+async function setStatus(id, val){
+  const t = todos.find(x=>x.id===id); if(!t) return;
+  const wasDone = t.status === 'completed';
+  t.status = val;
+  if(val==='completed'){ t.himDone=true; t.herDone=true; }
+  else if(val==='pending'){ t.himDone=false; t.herDone=false; }
+  t.updatedAt=now();
+
+  // Star animation
+  if(!wasDone && val==='completed' && (t.assignTo==='her'||t.assignTo==='both')){
+    const stars = STAR_MAP[t.priority]||1;
+    const starBadge = document.getElementById('star-badge');
+    if(starBadge){
+      const rect = starBadge.getBoundingClientRect();
+      spawnStarAnim(rect.left, rect.top, stars);
+    }
+    setTimeout(()=>{ updateStarBadge(); renderRedeem(); }, 900);
+    showToast(`⭐ +${stars} star${stars>1?'s':''}! Keep going! 🔥`);
+  }
+
+  render(); renderDash(); renderMonitor();
+  await saveTodos();
+}
+
+async function delTodo(id){
+  todos=todos.filter(x=>x.id!==id);
+  render(); renderDash(); renderMonitor();
+  await saveTodos(); showToast('Removed ✓');
+}
+
+// ══════════════════════════════════════════════════
+//  EDIT TASK
+// ══════════════════════════════════════════════════
+function openEdit(id){
+  const t = todos.find(x=>x.id===id); if(!t) return;
+  editId = id;
+  document.getElementById('e-text').value   = t.text;
+  document.getElementById('e-cat').value    = t.cat;
+  document.getElementById('e-pri').value    = t.priority;
+  document.getElementById('e-status').value = t.status;
+  document.getElementById('e-due').value    = t.dueDate || '';
+  document.getElementById('e-assign').value = t.assignTo;
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal(){
+  document.getElementById('edit-modal').classList.remove('open');
+  editId = null;
+}
+
+function closeEditOvr(e){ if(e.target===document.getElementById('edit-modal')) closeEditModal(); }
+
+async function saveEdit(){
+  const t = todos.find(x=>x.id===editId); if(!t) return;
+  const wasDone = t.status === 'completed';
+  t.text     = document.getElementById('e-text').value.trim() || t.text;
+  t.cat      = document.getElementById('e-cat').value;
+  t.priority = document.getElementById('e-pri').value;
+  t.status   = document.getElementById('e-status').value;
+  t.dueDate  = document.getElementById('e-due').value;
+  t.assignTo = document.getElementById('e-assign').value;
+  if(t.status==='completed'){ t.himDone=true; t.herDone=true; }
+  else if(t.status==='pending'){ t.himDone=false; t.herDone=false; }
+  t.updatedAt = now();
+
+  if(!wasDone && t.status==='completed' && (t.assignTo==='her'||t.assignTo==='both')){
+    const stars = STAR_MAP[t.priority]||1;
+    showToast(`⭐ +${stars} stars earned!`);
+  }
+
+  closeEditModal();
+  render(); renderDash(); renderMonitor(); renderRedeem();
+  await saveTodos();
+  showToast('✦ Task updated!');
+}
+
+// ══════════════════════════════════════════════════
+//  BULK ADD
+// ══════════════════════════════════════════════════
+function parseBulk(){
+  const raw = document.getElementById('bulk-input').value;
+  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l.length>1);
+  const pv = document.getElementById('parsed-preview');
+  const pl = document.getElementById('preview-list');
+  if(lines.length>1){
+    pv.className='parsed-preview show';
+    pl.innerHTML = lines.slice(0,8).map(l=>`<div class="preview-item">• ${esc(l)}</div>`).join('') +
+      (lines.length>8?`<div class="preview-item" style="color:var(--rose)">+${lines.length-8} more…</div>`:'');
+  } else {
+    pv.className='parsed-preview';
+  }
+}
+
+async function addTodos(){
+  const raw = document.getElementById('bulk-input').value.trim();
+  if(!raw){ showToast('Write something first!'); return; }
+  const lines = raw.split('\n').map(l=>l.trim()).filter(l=>l.length>1);
+  const tasks = lines.length >= 1 ? lines : [raw];
+  const cat    = document.getElementById('m-cat').value;
+  const pri    = document.getElementById('m-pri').value;
+  const status = document.getElementById('m-status').value;
+  const due    = document.getElementById('m-due').value;
+  const assign = document.getElementById('m-assign').value;
+
+  const newTodos = tasks.map(text=>({
+    id:uid(), text, cat, priority:pri, status,
+    addedBy: session.role, assignTo: assign,
+    himDone: status==='completed', herDone: status==='completed',
+    dueDate: due, createdAt:now(), updatedAt:now()
+  }));
+  todos.unshift(...newTodos);
+  render(); renderDash(); renderMonitor();
+  await saveTodos();
+  closeModal();
+  showToast(`✦ Added ${newTodos.length} task${newTodos.length>1?'s':''}!`);
+  document.getElementById('bulk-input').value='';
+  document.getElementById('m-due').value='';
+  document.getElementById('parsed-preview').className='parsed-preview';
+}
+
+// ══════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════
+function calcStreak(){
+  const days = {};
+  todos.filter(t=>t.status==='completed').forEach(t=>{
+    const d = new Date(t.updatedAt).toDateString();
+    days[d]=true;
+  });
+  let streak=0, d=new Date();
+  while(days[d.toDateString()]){ streak++; d.setDate(d.getDate()-1); }
+  return streak;
+}
+
+function renderDash(){
+  const el = document.getElementById('dash-content');
+  const total = todos.length;
+  const done  = todos.filter(t=>t.status==='completed').length;
+  const inProg= todos.filter(t=>t.status==='in-progress').length;
+  const pend  = todos.filter(t=>t.status==='pending').length;
+  const hers  = todos.filter(t=>t.assignTo==='her'||t.assignTo==='both');
+  const hersDone = hers.filter(t=>t.status==='completed').length;
+  const smsTodos = todos.filter(t=>t.cat==='sms');
+  const smsDone  = smsTodos.filter(t=>t.status==='completed').length;
+  const streak   = calcStreak();
+  const pct      = total ? Math.round(done/total*100) : 0;
+  const herPct   = hers.length ? Math.round(hersDone/hers.length*100) : 0;
+  const smsPct   = smsTodos.length ? Math.round(smsDone/smsTodos.length*100) : 0;
+  const herStars = calcHerStars();
+
+  el.innerHTML = `
+    <div class="dash-grid">
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--rose)">${pct}%</div>
+        <div class="stat-lbl">Overall Complete</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--rose)"></div></div>
+        <div class="stat-sub">${done} of ${total} tasks</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--gold)">🔥 ${streak}</div>
+        <div class="stat-lbl">Day Streak</div>
+        <div class="stat-sub">Consecutive active days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--amber)">${inProg}</div>
+        <div class="stat-lbl">In Progress</div>
+        <div class="stat-sub">${pend} still pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:var(--star)">⭐ ${herStars}</div>
+        <div class="stat-lbl">Her Stars</div>
+        <div class="stat-sub">${Math.floor(herStars/100)} rewards earned</div>
+      </div>
+      <div class="stat-card full">
+        <div class="stat-lbl" style="margin-bottom:.5rem">📱 SMS Project Progress</div>
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;">
+          <span>${smsDone} / ${smsTodos.length} tasks</span>
+          <span style="color:var(--blue)">${smsPct}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${smsPct}%;background:var(--blue)"></div></div>
+      </div>
+      <div class="stat-card full">
+        <div class="stat-lbl" style="margin-bottom:.5rem">👧 Her Tasks Progress</div>
+        <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.3rem;">
+          <span>${hersDone} / ${hers.length} tasks</span>
+          <span style="color:var(--her)">${herPct}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${herPct}%;background:var(--her)"></div></div>
+      </div>
+    </div>
+
+    <div class="section-head">By Category</div>
+    ${['sms','general','date','shopping','travel','food','home','health','learning'].map(cat=>{
+      const cTodos = todos.filter(t=>t.cat===cat);
+      if(!cTodos.length) return '';
+      const cDone = cTodos.filter(t=>t.status==='completed').length;
+      const cPct  = Math.round(cDone/cTodos.length*100);
+      return `<div class="stat-card full" style="margin-bottom:.5rem;padding:.7rem 1rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;">
+          <span style="font-size:.8rem;">${CAT_ICONS[cat]||'📋'} ${cat} <span style="color:var(--muted)">(${cTodos.length})</span></span>
+          <span style="font-size:.72rem;color:var(--rose)">${cPct}%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${cPct}%;background:var(--rose)"></div></div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+// ══════════════════════════════════════════════════
+//  MONITOR (his view of her progress)
+// ══════════════════════════════════════════════════
+function renderMonitor(){
+  const el = document.getElementById('monitor-content');
+  if(session.role !== 'him'){ el.innerHTML=''; return; }
+
+  const herTasks  = todos.filter(t=>t.assignTo==='her'||t.assignTo==='both');
+  const herDone   = herTasks.filter(t=>t.status==='completed');
+  const herInProg = herTasks.filter(t=>t.status==='in-progress');
+  const herPend   = herTasks.filter(t=>t.status==='pending');
+  const herPct    = herTasks.length ? Math.round(herDone.length/herTasks.length*100) : 0;
+  const smsTasks  = todos.filter(t=>t.cat==='sms' && (t.assignTo==='her'||t.assignTo==='both'));
+  const smsDone   = smsTasks.filter(t=>t.status==='completed').length;
+  const herStars  = calcHerStars();
+  const pendingRedeems = redeems.filter(r=>r.status==='pending');
+
+  const healthScore = herPct >= 80 ? 'great' : herPct >= 40 ? 'warn' : 'lag';
+  const healthMsg   = { great:'On fire! 🔥', warn:'Making progress 🌱', lag:'Needs a nudge 💛' }[healthScore];
+
+  const recentActivity = [...todos]
+    .filter(t=>t.assignTo==='her'||t.assignTo==='both')
+    .sort((a,b)=>b.updatedAt-a.updatedAt)
+    .slice(0,5);
+
+  el.innerHTML = `
+    <div class="monitor-card">
+      <div class="monitor-header">
+        <div class="monitor-title">👧 Her Progress Overview</div>
+        <div class="monitor-badge ${healthScore}">${healthMsg}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem;">
+        <div style="text-align:center;padding:.5rem;background:var(--surface);border-radius:10px;">
+          <div style="font-size:1.3rem;font-weight:600;color:var(--green)">${herDone.length}</div>
+          <div style="font-size:.65rem;color:var(--muted)">Done</div>
+        </div>
+        <div style="text-align:center;padding:.5rem;background:var(--surface);border-radius:10px;">
+          <div style="font-size:1.3rem;font-weight:600;color:var(--amber)">${herInProg.length}</div>
+          <div style="font-size:.65rem;color:var(--muted)">In Progress</div>
+        </div>
+        <div style="text-align:center;padding:.5rem;background:var(--surface);border-radius:10px;">
+          <div style="font-size:1.3rem;font-weight:600;color:var(--star)">⭐ ${herStars}</div>
+          <div style="font-size:.65rem;color:var(--muted)">Her Stars</div>
+        </div>
+      </div>
+      <div style="font-size:.75rem;color:var(--text2);margin-bottom:.3rem;">Overall completion</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${herPct}%;background:var(--her)"></div></div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;">${herPct}% · ${herDone.length} of ${herTasks.length} tasks</div>
+    </div>
+
+    ${pendingRedeems.length ? `
+    <div class="monitor-card" style="border-color:#4a3010;">
+      <div class="monitor-header">
+        <div class="monitor-title">🎁 Wish Requests (${pendingRedeems.length} pending)</div>
+        <div class="monitor-badge warn">Needs response</div>
+      </div>
+      ${pendingRedeems.map(r=>`
+        <div class="activity-row">
+          <div class="act-icon">🎁</div>
+          <div class="act-body">
+            <div class="act-text">${esc(r.message)}</div>
+            <div class="act-time">${r.phone ? '📞 '+esc(r.phone) : ''} · ${timeAgo(r.ts)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;">
+            <button onclick="handleRedeem('${r.id}','approved')" style="padding:.2rem .5rem;border-radius:6px;border:none;background:var(--green-dim);color:var(--green);font-size:.68rem;cursor:pointer;">✓ Grant</button>
+            <button onclick="handleRedeem('${r.id}','rejected')" style="padding:.2rem .5rem;border-radius:6px;border:none;background:#3a1010;color:#ff6b6b;font-size:.68rem;cursor:pointer;">✗ Deny</button>
+          </div>
+        </div>`).join('')}
+    </div>` : ''}
+
+    <div class="monitor-card">
+      <div class="monitor-header">
+        <div class="monitor-title">📱 SMS Project Health</div>
+        <div class="monitor-badge ${smsDone===smsTasks.length&&smsTasks.length>0?'great':smsDone>0?'warn':'lag'}">
+          ${smsDone}/${smsTasks.length} done
+        </div>
+      </div>
+      ${smsTasks.map(t=>`
+        <div class="activity-row">
+          <div class="act-icon">${CAT_ICONS[t.cat]}</div>
+          <div class="act-body">
+            <div class="act-text">${esc(t.text)}</div>
+            <div class="act-time">${priLabel(t.priority)}</div>
+          </div>
+          <span class="act-status" style="background:${t.status==='completed'?'var(--green-dim)':t.status==='in-progress'?'var(--amber-dim)':'var(--surface)'};
+            color:${t.status==='completed'?'var(--green)':t.status==='in-progress'?'var(--amber)':'var(--muted)'};
+            border-radius:6px;padding:.15rem .5rem;font-size:.65rem;white-space:nowrap;">
+            ${t.status==='completed'?'✅':t.status==='in-progress'?'🔄':'⏳'} ${t.status}
+          </span>
+        </div>`).join('') || '<div style="font-size:.8rem;color:var(--muted);padding:.5rem 0">No SMS tasks yet. Add some!</div>'}
+    </div>
+
+    <div class="monitor-card">
+      <div class="monitor-title" style="font-size:.85rem;margin-bottom:.7rem;">🕐 Recent Activity</div>
+      ${recentActivity.map(t=>`
+        <div class="activity-row">
+          <div class="act-icon">${t.status==='completed'?'✅':t.status==='in-progress'?'🔄':'⏳'}</div>
+          <div class="act-body">
+            <div class="act-text">${esc(t.text)}</div>
+            <div class="act-time">${timeAgo(t.updatedAt)}</div>
+          </div>
+        </div>`).join('') || '<div style="font-size:.8rem;color:var(--muted);">No activity yet</div>'}
+    </div>
+
+    <div class="section-head">Overdue / Urgent</div>
+    ${todos.filter(t=>(t.assignTo==='her'||t.assignTo==='both')&&t.priority==='urgent'&&t.status!=='completed').map(t=>`
+      <div class="monitor-card" style="border-color:#3a1010;">
+        <div style="font-size:.82rem;color:var(--text)">${esc(t.text)}</div>
+        <div style="font-size:.68rem;color:#ff6b6b;margin-top:.3rem">🔴 Urgent — ${t.status}</div>
+      </div>
+    `).join('') || '<div style="font-size:.82rem;color:var(--muted);padding:.5rem 0;">No urgent tasks 🎉</div>'}
+  `;
+}
+
+async function handleRedeem(id, status){
+  const r = redeems.find(x=>x.id===id); if(!r) return;
+  r.status = status;
+  r.respondedAt = now();
+  await saveRedeems();
+  renderMonitor(); renderRedeem();
+  showToast(status==='approved' ? '🎁 Wish granted! 💛' : '✗ Wish denied.');
+}
+
+function timeAgo(ts){
+  const s=Math.floor((now()-ts)/1000);
+  if(s<60) return 'just now';
+  if(s<3600) return Math.floor(s/60)+'m ago';
+  if(s<86400) return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+
+// ══════════════════════════════════════════════════
+//  REDEEM PAGE
+// ══════════════════════════════════════════════════
+function renderRedeem(){
+  if(!session || session.role !== 'her') return;
+  const stars = calcHerStars();
+
+  document.getElementById('redeem-star-count').textContent = stars;
+  const progress = Math.min(100, (stars % 100));
+  document.getElementById('redeem-progress-fill').style.width = progress + '%';
+  document.getElementById('redeem-hint').textContent = `${progress} / 100 stars · ${Math.floor(stars/100)} reward${Math.floor(stars/100)!==1?'s':''} available`;
+
+  const btn = document.getElementById('redeem-submit-btn');
+  if(stars >= 100){
+    btn.disabled = false;
+    btn.textContent = `⭐ Redeem 100 Stars for This Wish`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = `Need ${100 - stars} more stars to redeem`;
+  }
+
+  // History
+  const el = document.getElementById('redeem-history');
+  if(!redeems.length){
+    el.innerHTML = '<div style="font-size:.82rem;color:var(--muted);padding:.5rem 0;">No wishes yet. Earn stars by completing tasks! 🌟</div>';
+    return;
+  }
+  el.innerHTML = redeems.slice().reverse().map(r=>`
+    <div class="redeem-item">
+      <div class="redeem-item-icon">${r.status==='approved'?'🎁':r.status==='rejected'?'💔':'⏳'}</div>
+      <div class="redeem-item-body">
+        <div class="redeem-item-msg">${esc(r.message)}</div>
+        ${r.phone?`<div class="redeem-item-phone">📞 ${esc(r.phone)}</div>`:''}
+        <div class="redeem-item-meta">Requested ${timeAgo(r.ts)} · -100 ⭐</div>
+      </div>
+      <span class="redeem-status ${r.status}">${r.status==='approved'?'✓ Granted':r.status==='rejected'?'✗ Denied':'⏳ Pending'}</span>
+    </div>
+  `).join('');
+}
+
+async function submitRedeem(){
+  const msg   = document.getElementById('redeem-msg').value.trim();
+  const phone = document.getElementById('redeem-phone').value.trim();
+  if(!msg){ showToast('Tell me what you want! 💭'); return; }
+  const stars = calcHerStars();
+  if(stars < 100){ showToast(`Need ${100-stars} more stars first!`); return; }
+
+  redeems.push({
+    id: uid(), message: msg, phone: phone,
+    status: 'pending', ts: now(), respondedAt: null
+  });
+  await saveRedeems();
+  document.getElementById('redeem-msg').value   = '';
+  document.getElementById('redeem-phone').value = '';
+  renderRedeem(); renderMonitor(); renderDash();
+  showToast('🎁 Wish sent! He\'ll see it 💛');
+}
+
+// ══════════════════════════════════════════════════
+//  NOTES & NUDGES
+// ══════════════════════════════════════════════════
+function setRandomNudge(){
+  const msg = NUDGES[Math.floor(Math.random()*NUDGES.length)];
+  document.getElementById('random-nudge').textContent = '"'+msg+'"';
+  document.getElementById('nudge-compose').style.display = session.role==='him' ? '' : 'none';
+}
+
+async function sendNudge(){
+  const msg = document.getElementById('random-nudge').textContent.replace(/^"|"$/g,'');
+  notes.unshift({ id:uid(), text:msg, from:session.role, fromName:session.name,
+    type:'nudge', ts:now() });
+  await saveNotes(); renderNotes();
+  showToast('💛 Nudge sent!');
+  setRandomNudge();
+}
+
+async function sendNote(){
+  const txt = document.getElementById('note-text').value.trim();
+  if(!txt){ showToast('Write something first!'); return; }
+  notes.unshift({ id:uid(), text:txt, from:session.role, fromName:session.name,
+    type:'note', ts:now() });
+  document.getElementById('note-text').value='';
+  await saveNotes(); renderNotes();
+  showToast('✦ Sent!');
+}
+
+function renderNotes(){
+  const el = document.getElementById('notes-feed');
+  if(!notes.length){ el.innerHTML='<div class="empty"><div class="ei">💬</div><p>No messages yet.<br>Send a note or nudge!</p></div>'; return; }
+  el.innerHTML = notes.slice(0,20).map(n=>`
+    <div class="msg-bubble from-${n.from}">
+      ${n.type==='nudge'?'💛 ':''}${esc(n.text)}
+      <div class="msg-meta">${n.fromName} · ${timeAgo(n.ts)}${n.type==='nudge'?' · motivation nudge':''}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+//  TAB NAV
+// ══════════════════════════════════════════════════
+function gotoTab(name, btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('add-fab').style.display = name==='todos' ? '' : 'none';
+  if(name==='dash')    renderDash();
+  if(name==='monitor') renderMonitor();
+  if(name==='notes'){ renderNotes(); setRandomNudge(); }
+  if(name==='redeem')  renderRedeem();
+}
+
+// ══════════════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════════════
+function openModal(){
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('bulk-input').focus(),300);
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+function closeOvr(e){ if(e.target===document.getElementById('modal')) closeModal(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal(); closeEditModal(); } });
+
+// ══════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════
+let tt;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+</script>
+</body>
+</html>
