@@ -782,6 +782,46 @@
       box-shadow: 7px 7px 0px #000;
     }
 
+    /* ── SCROLL TO TOP BUTTON ── */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.5rem;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid #000;
+      color: #000;
+      font-size: 1.8rem;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 4px 4px 0px #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+      transition: transform 0.15s, box-shadow 0.15s, bottom 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, visibility 0.2s;
+    }
+
+    .scroll-top-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .scroll-top-btn:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 7px 7px 0px #000;
+    }
+
+    .scroll-top-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0px #000;
+    }
+
     /* ── MODALS ── */
     .overlay,
     .edit-overlay {
@@ -1794,6 +1834,8 @@
 
     </div>
 
+    <!-- SCROLL TO TOP BUTTON -->
+    <button class="scroll-top-btn" onclick="scrollToTop()" id="scroll-top-btn">↑</button>
     <button class="fab" onclick="openModal()" id="add-fab">＋</button>
   </div>
 
@@ -3286,6 +3328,22 @@
       document.getElementById('tab-' + name).classList.add('active');
       btn.classList.add('active');
       document.getElementById('add-fab').style.display = name === 'todos' ? '' : 'none';
+      
+      // Reset scroll position on tab change
+      const appBody = document.querySelector('.app-body');
+      if (appBody) {
+        appBody.scrollTop = 0;
+      }
+      
+      // Hide the scroll-top button since we just scrolled back to top
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      if (scrollTopBtn) {
+        scrollTopBtn.classList.remove('visible');
+      }
+      
+      // Update scroll-top button position based on add-fab visibility
+      updateScrollTopBtnPosition();
+
       if (name === 'dash') renderDash();
       if (name === 'monitor') renderMonitor();
       if (name === 'notes') { renderNotes(); setRandomNudge(); }
@@ -3452,6 +3510,44 @@
           confirmResolve = null;
           res(val);
         }
+      }
+    }
+
+    // ══════════════════════════════════════════════════
+    //  SCROLL TO TOP
+    // ══════════════════════════════════════════════════
+    function updateScrollTopBtnPosition() {
+      const addFab = document.getElementById('add-fab');
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      if (scrollTopBtn && addFab) {
+        if (addFab.style.display !== 'none') {
+          scrollTopBtn.style.bottom = '6rem';
+        } else {
+          scrollTopBtn.style.bottom = '1.5rem';
+        }
+      }
+    }
+
+    const appBody = document.querySelector('.app-body');
+    const scrollTopBtn = document.getElementById('scroll-top-btn');
+
+    if (appBody && scrollTopBtn) {
+      appBody.addEventListener('scroll', () => {
+        if (appBody.scrollTop > 300) {
+          scrollTopBtn.classList.add('visible');
+        } else {
+          scrollTopBtn.classList.remove('visible');
+        }
+      });
+    }
+
+    function scrollToTop() {
+      const appBody = document.querySelector('.app-body');
+      if (appBody) {
+        appBody.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       }
     }
   </script>
