@@ -100,12 +100,13 @@
 
     /* ── AUTH ── */
     #auth-screen {
-      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 1rem;
       /* Comic Rays Radial Background */
       background: radial-gradient(circle, var(--gold-dim) 20%, transparent 21%),
         radial-gradient(circle, var(--blue-dim) 40%, transparent 41%), var(--bg);
@@ -114,13 +115,14 @@
 
     .auth-brand {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 0.75rem;
     }
 
-    .auth-logo {
-      font-size: 4rem;
-      margin-bottom: 0.5rem;
-      filter: drop-shadow(4px 4px 0px #000);
+    .auth-logo-img {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      margin-bottom: 0.4rem;
       animation: float 2.5s ease-in-out infinite;
     }
 
@@ -132,72 +134,72 @@
       }
 
       50% {
-        transform: translateY(-8px) rotate(3deg);
+        transform: translateY(-6px) rotate(2deg);
       }
     }
 
     .auth-title {
       font-family: 'Bangers', cursive;
-      font-size: 3rem;
+      font-size: 2.2rem;
       color: #000;
-      letter-spacing: 3px;
-      text-shadow: 3px 3px 0px var(--gold);
+      letter-spacing: 1.5px;
+      text-shadow: 2px 2px 0px var(--gold);
       -webkit-text-stroke: 1.5px #000;
     }
 
     .auth-title em {
       color: var(--rose);
       font-style: normal;
-      text-shadow: 3px 3px 0px var(--blue-dim);
+      text-shadow: 2px 2px 0px var(--blue-dim);
     }
 
     .auth-sub {
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.72rem;
       color: #000;
       background: #FFF;
       border: 2px solid #000;
-      padding: 0.2rem 0.6rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 8px;
       display: inline-block;
-      margin-top: 0.5rem;
-      box-shadow: 2px 2px 0px #000;
+      margin-top: 0.2rem;
+      box-shadow: 1.5px 1.5px 0px #000;
     }
 
     .auth-card {
       background: var(--card);
       border: 3px solid #000;
       border-radius: var(--r);
-      padding: 2rem 1.8rem;
+      padding: 1.2rem 1.4rem;
       width: 100%;
-      max-width: 380px;
-      box-shadow: 6px 6px 0px #000;
+      max-width: 330px;
+      box-shadow: 4px 4px 0px #000;
     }
 
     .field-grp {
-      margin-bottom: 1.2rem;
+      margin-bottom: 0.7rem;
     }
 
     .field-lbl {
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: #000;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .field-in {
       width: 100%;
-      padding: 0.75rem 0.9rem;
+      padding: 0.55rem 0.75rem;
       border-radius: var(--r);
       border: 3px solid #000;
       background: #FFF;
       color: #000;
       font-family: 'Comic Neue', cursive;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       outline: none;
       box-shadow: 2px 2px 0px #000;
       transition: transform 0.1s;
@@ -210,28 +212,28 @@
 
     .auth-btn {
       width: 100%;
-      padding: 0.85rem;
+      padding: 0.6rem;
       border-radius: var(--r);
       border: 3px solid #000;
       background: var(--rose);
       color: white;
       font-family: 'Bangers', cursive;
-      font-size: 1.6rem;
-      letter-spacing: 2px;
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
       text-shadow: 2px 2px 0px #000;
       cursor: pointer;
-      box-shadow: 4px 4px 0px #000;
+      box-shadow: 3px 3px 0px #000;
       transition: transform 0.1s, box-shadow 0.1s;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
     }
 
     .auth-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px #000;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #000;
     }
 
     .auth-btn:active {
-      transform: translate(2px, 2px);
+      transform: translate(1px, 1px);
       box-shadow: 2px 2px 0px #000;
     }
 
@@ -243,14 +245,14 @@
     }
 
     .auth-err {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--rose);
       text-align: center;
-      margin-top: 0.6rem;
+      margin-top: 0.5rem;
       font-weight: 700;
       background: var(--rose-dim);
       border: 2px solid #000;
-      padding: 0.4rem;
+      padding: 0.35rem;
       border-radius: 8px;
       display: none;
     }
@@ -260,11 +262,11 @@
     }
 
     .auth-hint {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       color: var(--muted);
       text-align: center;
-      margin-top: 1.2rem;
-      line-height: 1.5;
+      margin-top: 0.8rem;
+      line-height: 1.4;
     }
 
     /* ── APP SHELL ── */
@@ -1577,10 +1579,12 @@
       padding: 0;
       outline: none;
     }
+
     .sprite-btn:hover {
       transform: scale(1.15);
       box-shadow: 2px 2px 0px #000;
     }
+
     .sprite-btn:active {
       transform: scale(0.95);
       box-shadow: 1px 1px 0px #000;
@@ -1594,7 +1598,7 @@
   <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-brand">
-      <div class="auth-logo">💑</div>
+      <img class="auth-logo-img" src="/public/love-logo.png" alt="" />
       <div class="auth-title">Our Little <em>Space</em></div>
       <div class="auth-sub">PRIVATE · SHARED · MOTIVATED</div>
     </div>
@@ -1609,14 +1613,21 @@
         </div>
         <div class="field-grp">
           <div class="field-lbl">Password</div>
-          <input class="field-in" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password" />
+          <div style="position: relative; width: 100%;">
+            <input class="field-in" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+              style="padding-right: 2.8rem;" />
+            <button type="button" onclick="togglePasswordVisibility()"
+              style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.15rem; padding: 0; outline: none; user-select: none;">
+              <span id="pass-toggle-icon">👁️</span>
+            </button>
+          </div>
         </div>
         <button class="auth-btn" id="l-btn" onclick="doLogin()">Sign In</button>
         <div class="auth-err" id="l-err"></div>
       </div>
 
       <div class="auth-hint">
-        Private space for just the two of us 💑<br>
+        Private space for just the two of us 💜🤍<br>
         <span style="font-size:.65rem;color:var(--muted)">Your data syncs in real-time via cloud ☁️</span>
       </div>
     </div>
@@ -1664,9 +1675,10 @@
           <button class="flt" id="flt-completed" onclick="setFlt('completed',this)">Completed</button>
           <button class="flt" id="flt-mine" onclick="setFlt('mine',this)">Mine</button>
           <button class="flt" id="flt-hers" onclick="setFlt('hers',this)">Hers</button>
-          
+
           <!-- Category Dropdown Pill -->
-          <select class="flt" id="flt-cat-select" onchange="setFltSelect('cat', this.value)" style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
+          <select class="flt" id="flt-cat-select" onchange="setFltSelect('cat', this.value)"
+            style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
             <option value="">📁 Category</option>
             <option value="general">📋 General</option>
             <option value="sms">📱 SMS</option>
@@ -1680,7 +1692,8 @@
           </select>
 
           <!-- Priority Dropdown Pill -->
-          <select class="flt" id="flt-pri-select" onchange="setFltSelect('pri', this.value)" style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
+          <select class="flt" id="flt-pri-select" onchange="setFltSelect('pri', this.value)"
+            style="outline:none; cursor:pointer; padding-right:0.5rem; -webkit-appearance: none; -moz-appearance: none; appearance: none; text-align: center;">
             <option value="">👑 Priority</option>
             <option value="urgent">🔴 Urgent</option>
             <option value="high">🟠 High</option>
@@ -1722,17 +1735,21 @@
           <button class="nudge-send-btn" onclick="sendNudge()">Send this to her 💛</button>
         </div>
         <div class="section-head">Check-in Note</div>
-        
+
         <!-- Reply Preview Bar -->
-        <div id="reply-preview-container" style="display: none; background: #fff; border: 3px solid #000; border-bottom: none; border-radius: var(--r) var(--r) 0 0; padding: 0.6rem 0.8rem; align-items: center; justify-content: space-between; font-family: 'Comic Neue', cursive; font-weight: 700; box-shadow: 2px 2px 0px #000; margin-bottom: -3px; position: relative; z-index: 2;">
-          <div style="font-size: 0.82rem; color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; margin-right: 0.5rem;">
-            <span id="reply-preview-label" style="color: var(--rose);">↳ Replying to:</span> 
+        <div id="reply-preview-container"
+          style="display: none; background: #fff; border: 3px solid #000; border-bottom: none; border-radius: var(--r) var(--r) 0 0; padding: 0.6rem 0.8rem; align-items: center; justify-content: space-between; font-family: 'Comic Neue', cursive; font-weight: 700; box-shadow: 2px 2px 0px #000; margin-bottom: -3px; position: relative; z-index: 2;">
+          <div
+            style="font-size: 0.82rem; color: #000; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; margin-right: 0.5rem;">
+            <span id="reply-preview-label" style="color: var(--rose);">↳ Replying to:</span>
             <span id="reply-preview-text" style="color: var(--muted); font-style: italic;"></span>
           </div>
-          <button class="flt" onclick="cancelReply()" style="background: var(--gold); border-color: #000; padding: 0.15rem 0.4rem; font-size: 0.75rem; line-height: 1; cursor: pointer; font-weight: 900; margin: 0;">×</button>
+          <button class="flt" onclick="cancelReply()"
+            style="background: var(--gold); border-color: #000; padding: 0.15rem 0.4rem; font-size: 0.75rem; line-height: 1; cursor: pointer; font-weight: 900; margin: 0;">×</button>
         </div>
 
-        <textarea class="note-input" id="note-text" placeholder="Write a note, encouragement, or update…" style="margin-top: 0;"></textarea>
+        <textarea class="note-input" id="note-text" placeholder="Write a note, encouragement, or update…"
+          style="margin-top: 0;"></textarea>
         <button class="note-send" onclick="sendNote()">Send ✦</button>
         <div class="section-head" style="margin-top:1rem;">Messages</div>
         <div id="notes-feed"></div>
@@ -1927,8 +1944,10 @@
     <div class="modal" style="max-width: 400px;">
       <div class="modal-handle"></div>
       <div class="modal-title">Ask about Task 💬</div>
-      
-      <div style="font-size: 0.95rem; margin-bottom: 1.2rem; background: var(--surface); padding: 0.8rem; border: 3px solid #000; border-radius: 8px; box-shadow: 2px 2px 0px #000; font-family: 'Comic Neue', cursive; font-weight: bold; color: #000;" id="q-task-title-display">
+
+      <div
+        style="font-size: 0.95rem; margin-bottom: 1.2rem; background: var(--surface); padding: 0.8rem; border: 3px solid #000; border-radius: 8px; box-shadow: 2px 2px 0px #000; font-family: 'Comic Neue', cursive; font-weight: bold; color: #000;"
+        id="q-task-title-display">
         Task: ...
       </div>
 
@@ -1936,7 +1955,7 @@
         <div class="field-lbl">Your Question</div>
         <textarea class="bulk-area" id="q-input" rows="3" placeholder="Type your question here…"></textarea>
       </div>
-      
+
       <button class="m-submit" onclick="sendTaskQuery()">Send Question 🚀</button>
     </div>
   </div>
@@ -1946,10 +1965,13 @@
     <div class="modal" style="max-width: 360px;">
       <div class="modal-handle"></div>
       <div class="modal-title">My Profile 👤</div>
-      
+
       <div style="text-align: center; margin-bottom: 1.5rem;">
-        <div id="p-avatar-preview-wrap" style="width: 90px; height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: var(--gold-dim); border: 3px solid #000; border-radius: 50%; box-shadow: 4px 4px 0px #000; overflow: hidden; animation: float 3s ease-in-out infinite;">
-          <div id="p-avatar-preview" style="font-size: 4.5rem; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">⭐</div>
+        <div id="p-avatar-preview-wrap"
+          style="width: 90px; height: 90px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: var(--gold-dim); border: 3px solid #000; border-radius: 50%; box-shadow: 4px 4px 0px #000; overflow: hidden; animation: float 3s ease-in-out infinite;">
+          <div id="p-avatar-preview"
+            style="font-size: 4.5rem; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+            ⭐</div>
         </div>
       </div>
 
@@ -1960,33 +1982,49 @@
 
       <div class="field-grp">
         <div class="field-lbl">Profile Emoji / Avatar</div>
-        <input class="field-in" id="p-emoji-input" type="text" placeholder="e.g. 👦, 👧, 🐼, 🍕 or select below" maxlength="30" oninput="updateAvatarPreview(this.value)" />
-        <input type="file" id="p-file-input" accept="image/*" style="display: none;" onchange="handleProfileImageUpload(event)" />
-        
+        <input class="field-in" id="p-emoji-input" type="text" placeholder="e.g. 👦, 👧, 🐼, 🍕 or select below"
+          maxlength="30" oninput="updateAvatarPreview(this.value)" />
+        <input type="file" id="p-file-input" accept="image/*" style="display: none;"
+          onchange="handleProfileImageUpload(event)" />
+
         <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; flex-wrap: wrap;">
-          <button class="flt" onclick="document.getElementById('p-file-input').click()" style="background: var(--blue); color: white; border-color: #000; padding: 0.4rem 0.8rem; font-size: 0.78rem;">🖼️ Choose from Gallery</button>
+          <button class="flt" onclick="document.getElementById('p-file-input').click()"
+            style="background: var(--blue); color: white; border-color: #000; padding: 0.4rem 0.8rem; font-size: 0.78rem;">🖼️
+            Choose from Gallery</button>
         </div>
 
-        <div class="field-lbl" style="margin-top: 0.8rem; font-size: 0.72rem; text-transform: uppercase;">✨ Cute Animal Avatars</div>
-        <div id="sprite-picker-grid" style="display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.4rem; flex-wrap: wrap; max-height: 110px; overflow-y: auto; padding: 0.3rem; border: 3px solid #000; border-radius: 8px; background: var(--surface); box-shadow: 2px 2px 0px #000;">
+        <div class="field-lbl" style="margin-top: 0.8rem; font-size: 0.72rem; text-transform: uppercase;">✨ Cute Animal
+          Avatars</div>
+        <div id="sprite-picker-grid"
+          style="display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.4rem; flex-wrap: wrap; max-height: 110px; overflow-y: auto; padding: 0.3rem; border: 3px solid #000; border-radius: 8px; background: var(--surface); box-shadow: 2px 2px 0px #000;">
           <!-- Dynamically loaded sprites -->
         </div>
 
-        <div class="field-lbl" style="margin-top: 0.8rem; font-size: 0.72rem; text-transform: uppercase;">Standard Emojis</div>
+        <div class="field-lbl" style="margin-top: 0.8rem; font-size: 0.72rem; text-transform: uppercase;">Standard
+          Emojis</div>
         <div style="display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.4rem; flex-wrap: wrap;">
-          <button class="flt" onclick="selectProfileEmoji('👦')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👦</button>
-          <button class="flt" onclick="selectProfileEmoji('👧')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👧</button>
-          <button class="flt" onclick="selectProfileEmoji('🐱')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐱</button>
-          <button class="flt" onclick="selectProfileEmoji('🐼')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐼</button>
-          <button class="flt" onclick="selectProfileEmoji('🦊')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦊</button>
-          <button class="flt" onclick="selectProfileEmoji('🦄')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦄</button>
-          <button class="flt" onclick="selectProfileEmoji('💖')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">💖</button>
-          <button class="flt" onclick="selectProfileEmoji('🔥')" style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🔥</button>
+          <button class="flt" onclick="selectProfileEmoji('👦')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👦</button>
+          <button class="flt" onclick="selectProfileEmoji('👧')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">👧</button>
+          <button class="flt" onclick="selectProfileEmoji('🐱')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐱</button>
+          <button class="flt" onclick="selectProfileEmoji('🐼')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🐼</button>
+          <button class="flt" onclick="selectProfileEmoji('🦊')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦊</button>
+          <button class="flt" onclick="selectProfileEmoji('🦄')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🦄</button>
+          <button class="flt" onclick="selectProfileEmoji('💖')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">💖</button>
+          <button class="flt" onclick="selectProfileEmoji('🔥')"
+            style="padding: 0.3rem 0.6rem; font-size: 1.1rem;">🔥</button>
         </div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 1.5rem;">
-        <button class="m-submit" onclick="saveProfileChanges()" style="background: var(--green); margin: 0;">Save Profile ✦</button>
+        <button class="m-submit" onclick="saveProfileChanges()" style="background: var(--green); margin: 0;">Save
+          Profile ✦</button>
         <button class="m-submit" onclick="doLogout()" style="background: var(--rose); margin: 0;">Sign Out ⏏</button>
       </div>
     </div>
@@ -1996,10 +2034,15 @@
     <div class="modal" style="max-width: 320px; border-color: #000;" onclick="event.stopPropagation()">
       <div class="modal-handle" style="background: var(--rose);"></div>
       <div class="modal-title" style="color: var(--rose);" id="c-modal-title">Warning! ⚠️</div>
-      <p id="c-modal-msg" style="font-size: 0.95rem; margin: 1rem 0; line-height: 1.4; color: #000; text-align: center; font-weight: 700;"></p>
+      <p id="c-modal-msg"
+        style="font-size: 0.95rem; margin: 1rem 0; line-height: 1.4; color: #000; text-align: center; font-weight: 700;">
+      </p>
       <div style="display: flex; gap: 0.8rem; justify-content: center; margin-top: 1.2rem;">
-        <button class="flt" onclick="closeConfirm(false)" style="background: #FFF; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Cancel</button>
-        <button class="flt" onclick="closeConfirm(true)" style="background: var(--rose); color: white; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Yes, Go! 🚀</button>
+        <button class="flt" onclick="closeConfirm(false)"
+          style="background: #FFF; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+        <button class="flt" onclick="closeConfirm(true)"
+          style="background: var(--rose); color: white; border-color: #000; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem;">Yes,
+          Go! 🚀</button>
       </div>
     </div>
   </div>
@@ -2025,7 +2068,7 @@
       "Stuck? Break it into smaller pieces. You've solved harder things before 🧩",
       "Your future self will thank you for the work you put in today 🌸",
       "One commit at a time. One task at a time. You've got this 💻",
-      "I'm proud of how far you've come. Don't stop now 💑"
+      "I'm proud of how far you've come. Don't stop now 💜"
     ];
     const STAR_MAP = { urgent: 5, high: 3, medium: 2, low: 1 };
     const AVATAR_SPRITES = {
@@ -2194,7 +2237,21 @@
 
     function showE(el, msg) { el.textContent = msg; el.className = 'auth-err show'; }
 
+    function togglePasswordVisibility() {
+      const passInput = document.getElementById('l-pass');
+      const toggleIcon = document.getElementById('pass-toggle-icon');
+      if (!passInput || !toggleIcon) return;
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        toggleIcon.textContent = '🙈';
+      } else {
+        passInput.type = 'password';
+        toggleIcon.textContent = '👁️';
+      }
+    }
+
     async function doLogout() {
+      closeProfileModal();
       if (realtimeChannel) { sb.removeChannel(realtimeChannel); realtimeChannel = null; }
       await sb.auth.signOut();
       session = null;
@@ -2307,16 +2364,16 @@
     function handleProfileImageUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
-      
+
       const reader = new FileReader();
-      reader.onload = function(evt) {
+      reader.onload = function (evt) {
         const img = new Image();
-        img.onload = function() {
+        img.onload = function () {
           const canvas = document.createElement('canvas');
           const max_size = 128;
           let w = img.width;
           let h = img.height;
-          
+
           if (w > h) {
             if (w > max_size) {
               h *= max_size / w;
@@ -2328,12 +2385,12 @@
               h = max_size;
             }
           }
-          
+
           canvas.width = w;
           canvas.height = h;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
-          
+
           const base64Data = canvas.toDataURL('image/jpeg', 0.7);
           document.getElementById('p-emoji-input').value = base64Data;
           updateAvatarPreview(base64Data);
@@ -2466,7 +2523,7 @@
         return;
       }
       flt = val;
-      
+
       if (type === 'cat') {
         document.getElementById('flt-pri-select').value = "";
       } else {
@@ -2505,7 +2562,7 @@
 
       const priOrd = { urgent: 0, high: 1, medium: 2, low: 3 };
       const stOrd = { pending: 0, 'in-progress': 1, completed: 2 };
-      
+
       f.sort((a, b) => {
         if (stOrd[a.status] !== stOrd[b.status]) return stOrd[a.status] - stOrd[b.status];
         return (priOrd[a.priority] ?? 2) - (priOrd[b.priority] ?? 2);
@@ -2698,17 +2755,17 @@
       if (raw.startsWith('[') || raw.startsWith('{')) {
         try {
           const parsed = JSON.parse(raw);
-          
+
           // Check if it's the Project/Categories/Features structure
           if (parsed && (parsed.categories || parsed.project)) {
             const list = [];
             const categories = parsed.categories || [];
             const isSMS = /Sri Balaji|BCA|Student|Faculty|Management/i.test(parsed.project || '');
             const resolvedCat = isSMS ? 'sms' : null;
-            
+
             for (const cat of categories) {
               const catTitle = cat.title || '';
-              
+
               // 1. Direct tasks array in category
               if (Array.isArray(cat.tasks)) {
                 for (const t of cat.tasks) {
@@ -2731,7 +2788,7 @@
                   }
                 }
               }
-              
+
               // 2. Features object in category
               if (cat.features && typeof cat.features === 'object') {
                 for (const [featureName, featureTasks] of Object.entries(cat.features)) {
@@ -3244,7 +3301,7 @@
     }
     function closeModal() { document.getElementById('modal').classList.remove('open'); }
     function closeOvr(e) { if (e.target === document.getElementById('modal')) closeModal(); }
-    
+
     function openQueryModal(id, e) {
       if (e) e.stopPropagation();
       const t = todos.find(x => x.id === id);
@@ -3267,7 +3324,7 @@
       if (!t) return;
       const msg = document.getElementById('q-input').value.trim();
       if (!msg) { showToast('Type a question first!'); return; }
-      
+
       const recipient = t.assignTo === 'both' ? 'the other' : (t.assignTo === 'him' ? '👦 Sanjay' : '👧 My Love');
       const formattedText = `❓ Question about task [${t.text}]: ${msg}`;
       const n = {
@@ -3278,7 +3335,7 @@
         type: 'note',
         ts: now()
       };
-      
+
       notes.unshift(n);
       await saveNote(n);
       renderNotes();
@@ -3322,25 +3379,25 @@
       const newEmoji = document.getElementById('p-emoji-input').value.trim();
       if (!newName) { showToast('Name cannot be empty!'); return; }
       if (!newEmoji) { showToast('Profile picture/emoji cannot be empty!'); return; }
-      
+
       const { error } = await sb.from('profiles').update({ name: newName, emoji: newEmoji }).eq('email', session.email);
       if (error) {
         console.error('saveProfileChanges:', error);
         showToast('Failed to update profile 😢');
         return;
       }
-      
+
       session.name = newName;
       session.emoji = newEmoji;
-      
+
       if (profilesMap[session.role]) {
         profilesMap[session.role].name = newName;
         profilesMap[session.role].emoji = newEmoji;
       }
-      
+
       document.getElementById('u-avatar-wrap').innerHTML = renderAvatarHtml(newEmoji, true);
       document.getElementById('u-nm').textContent = newName;
-      
+
       updateAssignDropdowns();
       render();
       closeProfileModal();
@@ -3380,7 +3437,7 @@
         confirmResolve = resolve;
         document.getElementById('c-modal-title').textContent = title;
         document.getElementById('c-modal-msg').innerHTML = message;
-        
+
         const modal = document.getElementById('confirm-modal');
         modal.classList.add('open');
       });

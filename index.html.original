@@ -1764,7 +1764,7 @@
   <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-brand">
-      <div class="auth-logo">💑</div>
+      <div class="auth-logo">🤍💜</div>
       <div class="auth-title">Our Little <em>Space</em></div>
       <div class="auth-sub">PRIVATE · SHARED · MOTIVATED</div>
     </div>
@@ -1786,7 +1786,7 @@
       </div>
 
       <div class="auth-hint">
-        Private space for just the two of us 💑<br>
+        Private space for just the two of us <br>
         <span style="font-size:.65rem;color:var(--muted)">Your data syncs in real-time via cloud ☁️</span>
       </div>
     </div>
@@ -2187,7 +2187,7 @@
       "Stuck? Break it into smaller pieces. You've solved harder things before 🧩",
       "Your future self will thank you for the work you put in today 🌸",
       "One commit at a time. One task at a time. You've got this 💻",
-      "I'm proud of how far you've come. Don't stop now 💑"
+      "I'm proud of how far you've come. Don't stop now 💜"
     ];
     const STAR_MAP = { urgent: 5, high: 3, medium: 2, low: 1 };
 
