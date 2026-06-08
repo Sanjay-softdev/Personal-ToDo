@@ -16,6 +16,34 @@ function spawnStarAnim(x, y, count) {
   }
 }
 
+// Comic "Sound Effect" Popup
+function spawnComicPopup(x, y) {
+  const words = ['POW!', 'BAM!', 'BOOM!', 'SLAM!', 'CRACK!', 'ZAP!', 'YEAH!', 'KABOOM!'];
+  const word = words[Math.floor(Math.random() * words.length)];
+  
+  const colors = [
+    { bg: 'var(--rose)', shadow: 'var(--gold)' },
+    { bg: 'var(--gold)', shadow: 'var(--blue)' },
+    { bg: 'var(--blue)', shadow: 'var(--rose)' },
+    { bg: 'var(--green)', shadow: 'var(--gold)' },
+    { bg: 'var(--amber)', shadow: 'var(--blue)' }
+  ];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  
+  const el = document.createElement('div');
+  el.className = 'comic-pop-effect';
+  el.textContent = word;
+  
+  el.style.background = color.bg;
+  el.style.setProperty('--gold', color.shadow);
+  
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 800);
+}
+
 export default function TodoCard({ todo }) {
   const { 
     session, 
@@ -24,7 +52,8 @@ export default function TodoCard({ todo }) {
     setStatus, 
     deleteTodo, 
     setEditTodoId, 
-    setQueryTodoId 
+    setQueryTodoId,
+    playCompletionSound
   } = useApp();
 
   const done = todo.status === 'completed';
@@ -37,23 +66,33 @@ export default function TodoCard({ todo }) {
 
   const handleCheck = async (who, e) => {
     e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
     const result = await chkToggle(todo.id, who);
+    if (result && result.newlyCompleted) {
+      spawnComicPopup(rect.left + rect.width / 2, rect.top - 20);
+      playCompletionSound();
+    }
     if (result && result.animated) {
       const starBadge = document.getElementById('star-badge');
       if (starBadge) {
-        const rect = starBadge.getBoundingClientRect();
-        spawnStarAnim(rect.left, rect.top, result.stars);
+        const rectBadge = starBadge.getBoundingClientRect();
+        spawnStarAnim(rectBadge.left, rectBadge.top, result.stars);
       }
     }
   };
 
-  const handleStatusChange = async (val) => {
+  const handleStatusChange = async (val, e) => {
+    const rect = e ? e.target.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2 };
     const result = await setStatus(todo.id, val);
+    if (result && result.newlyCompleted) {
+      spawnComicPopup(rect.left + (rect.width || 0) / 2, rect.top - 20);
+      playCompletionSound();
+    }
     if (result && result.animated) {
       const starBadge = document.getElementById('star-badge');
       if (starBadge) {
-        const rect = starBadge.getBoundingClientRect();
-        spawnStarAnim(rect.left, rect.top, result.stars);
+        const rectBadge = starBadge.getBoundingClientRect();
+        spawnStarAnim(rectBadge.left, rectBadge.top, result.stars);
       }
     }
   };
@@ -122,7 +161,7 @@ export default function TodoCard({ todo }) {
               <select 
                 className={`status-sel ${todo.status}`} 
                 value={todo.status}
-                onChange={(e) => handleStatusChange(e.target.value)}
+                onChange={(e) => handleStatusChange(e.target.value, e)}
               >
                 <option value="pending">⏳ Pending</option>
                 <option value="in-progress">🔄 In Progress</option>

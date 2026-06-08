@@ -1773,3 +1773,152 @@ body {
     align-items: center;
   }
 }
+
+/* ── COMIC POP EFFECT ── */
+.comic-pop-effect {
+  position: fixed;
+  z-index: 1000000;
+  pointer-events: none;
+  font-family: 'Bangers', cursive;
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 
+    -3px -3px 0 #000,  
+     3px -3px 0 #000,
+    -3px  3px 0 #000,
+     3px  3px 0 #000,
+     4px  4px 0 var(--gold),
+     6px  6px 0 #000;
+  -webkit-text-stroke: 1.5px #000;
+  padding: 0.5rem 1.2rem;
+  background: var(--rose);
+  border: 3px solid #000;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 #000;
+  transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+  animation: comicPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
+}
+
+@keyframes comicPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(-50%, -100%) scale(1.25) rotate(15deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -115%) scale(1) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -130%) scale(0.8) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+/* ── NOTIFICATION DROPDOWN ── */
+.notif-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--rose);
+  color: white;
+  border: 2px solid #000;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 0px #000;
+  z-index: 10;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 280px;
+  background: #FFF;
+  border: 3px solid #000;
+  border-radius: var(--r);
+  box-shadow: 4px 4px 0px #000;
+  z-index: 1000;
+  text-align: left;
+  overflow: hidden;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.notif-title {
+  background: var(--gold);
+  border-bottom: 3px solid #000;
+  padding: 0.6rem 0.8rem;
+  font-family: 'Bangers', cursive;
+  font-size: 1.25rem;
+  letter-spacing: 1px;
+  color: #000;
+}
+
+.notif-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notif-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notif-body::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+.notif-body::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 3px;
+}
+
+.notif-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.notif-item {
+  padding: 0.7rem 0.8rem;
+  border-bottom: 2px solid #000;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.notif-item:hover {
+  background: var(--gold-dim);
+}
+
+.notif-item.unread {
+  background: var(--blue-dim);
+}
+
+.notif-item.unread:hover {
+  background: #d0e2ff;
+}
+
+.notif-text {
+  font-family: 'Comic Neue', cursive;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #222;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

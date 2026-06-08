@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { sb } from '../supabase';
 
 const AppContext = createContext();
@@ -65,6 +65,104 @@ export function AppProvider({ children }) {
   const [flt, setFlt] = useState('all');
   const [catFlt, setCatFlt] = useState('');
   const [priFlt, setPriFlt] = useState('');
+
+  // Global Active Tab & Notification read tracking
+  const [activeTab, setActiveTab] = useState('todos');
+  const [lastReadNotes, setLastReadNotes] = useState(() => Number(localStorage.getItem('lastReadNotes') || '0'));
+  
+  const activeTabRef = useRef(activeTab);
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+    if (activeTab === 'notes') {
+      const nowTs = Date.now();
+      setLastReadNotes(nowTs);
+      localStorage.setItem('lastReadNotes', nowTs.toString());
+    }
+  }, [activeTab]);
+
+  const unreadNotesCount = session 
+    ? notes.filter(n => n.from !== session.role && n.ts > lastReadNotes).length 
+    : 0;
+
+  // Browser Audio Auto-Unlocker Context
+  const audioCtxRef = useRef(null);
+
+  useEffect(() => {
+    const unlockAudio = () => {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+      // Remove listeners once unlocked
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+
+    window.addEventListener('click', unlockAudio);
+    window.addEventListener('keydown', unlockAudio);
+    window.addEventListener('touchstart', unlockAudio);
+
+    return () => {
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+  }, []);
+
+  const playNotificationSound = () => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.35);
+    } catch (e) {
+      console.warn('Notification sound failed:', e);
+    }
+  };
+
+  const playCompletionSound = () => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08); // E5
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16); // G5
+      osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.24); // C6
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.55);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.55);
+    } catch (e) {
+      console.warn('Completion sound failed:', e);
+    }
+  };
 
   // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -178,8 +276,20 @@ export function AppProvider({ children }) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'todos' }, () => {
         loadTodos();
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'notes' }, () => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'notes' }, (payload) => {
         loadNotes();
+        if (payload.eventType === 'INSERT') {
+          const newNote = payload.new;
+          if (newNote.from_role !== session?.role) {
+            // Only show toast and play sound if not currently on the notes tab
+            if (activeTabRef.current !== 'notes') {
+              const fromName = newNote.from_name || (newNote.from_role === 'him' ? 'Sanjay' : 'My Love');
+              const emoji = newNote.from_role === 'him' ? '👦' : '👧';
+              showToast(`${emoji} ${fromName} sent a new message!`);
+              playNotificationSound();
+            }
+          }
+        }
       })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'redeems' }, () => {
         loadRedeems();
@@ -286,7 +396,7 @@ export function AppProvider({ children }) {
       }
     }
 
-    return { animated, stars: earnedStars };
+    return { animated, stars: earnedStars, newlyCompleted: !wasDone && isNowDone };
   };
 
   const setStatus = async (id, val) => {
@@ -320,7 +430,7 @@ export function AppProvider({ children }) {
       showToast('Sync error 😢');
       setTodos(prev => prev.map(item => item.id === id ? t : item));
     }
-    return { animated, stars: earnedStars };
+    return { animated, stars: earnedStars, newlyCompleted: !wasDone && isNowDone };
   };
 
   const deleteTodo = async (id) => {
@@ -632,6 +742,7 @@ export function AppProvider({ children }) {
     <AppContext.Provider value={{
       session, loading, todos, notes, redeems, profilesMap,
       flt, setFlt, catFlt, setCatFlt, priFlt, setPriFlt,
+      activeTab, setActiveTab, unreadNotesCount, lastReadNotes,
       isAddModalOpen, setIsAddModalOpen,
       isProfileModalOpen, setIsProfileModalOpen,
       editTodoId, setEditTodoId,
@@ -642,7 +753,7 @@ export function AppProvider({ children }) {
       addTodos, chkToggle, setStatus, deleteTodo, saveEdit,
       sendNudge, sendNote, sendTaskQuery,
       calcHerStars, submitRedeem, handleRedeem, saveProfileChanges,
-      parseTasksInput
+      parseTasksInput, playCompletionSound
     }}>
       {children}
     </AppContext.Provider>

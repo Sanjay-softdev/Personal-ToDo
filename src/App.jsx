@@ -18,8 +18,7 @@ import ConfirmModal from './components/Common/ConfirmModal';
 import Toast from './components/Common/Toast';
 
 function AppContent() {
-  const { session, loading } = useApp();
-  const [activeTab, setActiveTab] = useState('todos');
+  const { session, loading, activeTab, setActiveTab } = useApp();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const appBodyRef = useRef(null);
 
